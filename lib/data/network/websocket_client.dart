@@ -10,6 +10,7 @@ class WebSocketClient {
   StreamController<WsEventDto>? _streamController;
   Timer? _reconnectTimer;
   bool _isConnected = false;
+  String? _currentRoomId;
   String? _currentUserId;
 
   WebSocketClient({String baseUrl = 'ws://localhost:8088/ws'})
@@ -20,11 +21,12 @@ class WebSocketClient {
     return _streamController!.stream;
   }
 
-  void connect(String userId) {
+  void connect(String roomId, String userId) {
     if (_isConnected) return;
+    _currentRoomId = roomId;
     _currentUserId = userId;
     
-    final wsUrl = Uri.parse('$_baseUrl?user_id=$userId');
+    final wsUrl = Uri.parse('$_baseUrl?room_id=$roomId&user_id=$userId');
     _channel = WebSocketChannel.connect(wsUrl);
     _isConnected = true;
 
@@ -59,14 +61,15 @@ class WebSocketClient {
   void _scheduleReconnect() {
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(const Duration(seconds: 3), () {
-      if (!_isConnected && _currentUserId != null) {
-        connect(_currentUserId!);
+      if (!_isConnected && _currentRoomId != null && _currentUserId != null) {
+        connect(_currentRoomId!, _currentUserId!);
       }
     });
   }
 
   void disconnect() {
     _isConnected = false;
+    _currentRoomId = null;
     _currentUserId = null;
     _reconnectTimer?.cancel();
     _channel?.sink.close();

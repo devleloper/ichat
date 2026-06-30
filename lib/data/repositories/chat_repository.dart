@@ -66,8 +66,8 @@ class ChatRepository implements IChatRepository {
   Stream<Message> get messageStream => _messageStreamController.stream;
 
   @override
-  Future<void> connect(String userId) async {
-    _wsClient.connect(userId);
+  Future<void> connect(String roomId, String userId) async {
+    _wsClient.connect(roomId, userId);
   }
 
   @override
