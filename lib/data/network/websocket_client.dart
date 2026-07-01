@@ -1,5 +1,8 @@
+// ignore_for_file: prefer_initializing_formals
+
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../models/ws_event_dto.dart';
 import '../models/incoming_ws_message_dto.dart';
@@ -13,8 +16,7 @@ class WebSocketClient {
   String? _currentRoomId;
   String? _currentUserId;
 
-  WebSocketClient({String baseUrl = 'ws://localhost:8088/ws'})
-      : _baseUrl = baseUrl;
+  WebSocketClient({required String baseUrl}) : _baseUrl = baseUrl;
 
   Stream<WsEventDto> get stream {
     _streamController ??= StreamController<WsEventDto>.broadcast();
@@ -37,7 +39,7 @@ class WebSocketClient {
           final event = WsEventDto.fromJson(jsonMap);
           _streamController?.add(event);
         } catch (e) {
-          print('WebSocket message decode error: $e');
+          debugPrint('WebSocket message decode error: $e');
         }
       },
       onDone: () {

@@ -14,7 +14,7 @@ class AppTheme {
       colorScheme: const ColorScheme.light(
         primary: iMessageBlue,
         secondary: iMessageBlue,
-        background: backgroundLight,
+        surface: backgroundLight,
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: backgroundLight,

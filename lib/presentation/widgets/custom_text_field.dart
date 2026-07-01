@@ -33,9 +33,9 @@ class CustomTextField extends StatelessWidget {
         ),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (prefixIcon != null) prefixIcon!,
+          ?prefixIcon,
           Expanded(
             child: TextField(
               controller: controller,
@@ -43,7 +43,7 @@ class CustomTextField extends StatelessWidget {
               onChanged: onChanged,
               onSubmitted: (_) => onSubmitted?.call(),
               minLines: 1,
-              maxLines: 5,
+              maxLines: 1,
               textInputAction: TextInputAction.send,
               style: AppTheme.lightTheme.textTheme.bodyMedium,
               decoration: InputDecoration(
@@ -60,7 +60,7 @@ class CustomTextField extends StatelessWidget {
               ),
             ),
           ),
-          if (suffixIcon != null) suffixIcon!,
+          ?suffixIcon,
         ],
       ),
     );

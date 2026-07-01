@@ -14,11 +14,17 @@ class ChatRepository implements IChatRepository {
   final WebSocketClient _wsClient;
   
   final StreamController<Message> _messageStreamController = StreamController<Message>.broadcast();
+  final StreamController<String> _typingStreamController = StreamController<String>.broadcast();
 
   ChatRepository(this._apiClient, this._wsClient) {
     _wsClient.stream.listen((eventDto) {
       if (eventDto.type == 'message.created' && eventDto.message != null) {
-        _messageStreamController.add(eventDto.message!.toEntity());
+        final messageEntity = eventDto.message!.toEntity().copyWith(
+          clientMessageId: eventDto.clientMessageId,
+        );
+        _messageStreamController.add(messageEntity);
+      } else if (eventDto.type == 'user.typing' && eventDto.userId != null) {
+        _typingStreamController.add(eventDto.userId!);
       }
     });
   }
@@ -27,7 +33,9 @@ class ChatRepository implements IChatRepository {
   Future<List<Room>> getRooms(String userId) async {
     try {
       final response = await _apiClient.dio.get('/api/rooms?user_id=$userId');
-      final data = response.data['items'] as List<dynamic>;
+      final data = response.data['items'] as List<dynamic>?;
+      if (data == null) return [];
+      
       return data
           .map((json) => RoomDto.fromJson(json as Map<String, dynamic>).toEntity())
           .toList();
@@ -53,7 +61,9 @@ class ChatRepository implements IChatRepository {
   Future<List<Message>> getMessages(String roomId, String userId) async {
     try {
       final response = await _apiClient.dio.get('/api/rooms/$roomId/messages?user_id=$userId');
-      final data = response.data['items'] as List<dynamic>;
+      final data = response.data['items'] as List<dynamic>?;
+      if (data == null) return [];
+      
       return data
           .map((json) => MessageDto.fromJson(json as Map<String, dynamic>).toEntity())
           .toList();
@@ -64,6 +74,9 @@ class ChatRepository implements IChatRepository {
 
   @override
   Stream<Message> get messageStream => _messageStreamController.stream;
+
+  @override
+  Stream<String> get typingStream => _typingStreamController.stream;
 
   @override
   Future<void> connect(String roomId, String userId) async {
@@ -77,6 +90,12 @@ class ChatRepository implements IChatRepository {
       text: message.text,
       clientMessageId: message.clientMessageId,
     );
+    _wsClient.send(payload);
+  }
+
+  @override
+  void sendTyping() {
+    final payload = const IncomingWsMessageDto(type: 'typing');
     _wsClient.send(payload);
   }
 

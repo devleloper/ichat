@@ -14,7 +14,9 @@ class AuthRepository implements IAuthRepository {
   Future<List<User>> getUsers() async {
     try {
       final response = await _apiClient.dio.get('/api/users');
-      final data = response.data['items'] as List<dynamic>;
+      final data = response.data['items'] as List<dynamic>?;
+      if (data == null) return [];
+      
       return data
           .map((json) => UserDto.fromJson(json as Map<String, dynamic>).toEntity())
           .toList();

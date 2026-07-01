@@ -7,7 +7,9 @@ abstract class IChatRepository {
   Future<List<Message>> getMessages(String roomId, String userId);
   
   Stream<Message> get messageStream;
+  Stream<String> get typingStream;
   Future<void> connect(String roomId, String userId);
   Future<void> sendMessage(Message message);
+  void sendTyping();
   void disconnect();
 }

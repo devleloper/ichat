@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import '../../../theme/app_theme.dart';
 import '../../../widgets/bounce_button.dart';
-import '../../../widgets/custom_text_field.dart';
+import '../../../widgets/user_tile.dart';
 import '../bloc/chat_list_bloc.dart';
 import '../bloc/chat_list_event.dart';
 import '../bloc/chat_list_state.dart';
@@ -20,20 +20,12 @@ class ChatListScreen extends StatefulWidget {
 }
 
 class _ChatListScreenState extends State<ChatListScreen> {
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     context.read<ChatListBloc>().add(const ChatListEvent.loadRooms());
   }
-
-  @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
   void _showNewMessageSheet(BuildContext context, Map<String, User> userCache) {
     final authState = context.read<AuthBloc>().state;
     final currentUserId = switch (authState) {
@@ -53,7 +45,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
               const Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Text(
-                  'New Message',
+                  'Новое сообщение',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                 ),
               ),
@@ -62,18 +54,12 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   itemCount: userCache.length,
                   itemBuilder: (context, index) {
                     final user = userCache.values.elementAt(index);
-                    if (user.id == currentUserId)
+                    if (user.id == currentUserId) {
                       return const SizedBox.shrink();
+                    }
 
-                    return ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: AppTheme.iMessageBlue,
-                        child: Text(
-                          user.name[0].toUpperCase(),
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      title: Text(user.name),
+                    return UserTile(
+                      title: user.name,
                       onTap: () {
                         Navigator.pop(sheetContext);
                         context.read<ChatListBloc>().add(
@@ -100,55 +86,39 @@ class _ChatListScreenState extends State<ChatListScreen> {
             SliverAppBar(
               floating: true,
               pinned: true,
-              expandedHeight: 120.0,
+              expandedHeight: 70.0,
               backgroundColor: AppTheme.backgroundLight,
-              actions: [
-                BounceButton(
-                  onPressed: () {
-                    final state = context.read<ChatListBloc>().state;
-                    if (state is LoadedState) {
-                      _showNewMessageSheet(context, state.userCache);
-                    }
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Icon(
-                      CupertinoIcons.pencil_outline,
-                      color: AppTheme.iMessageBlue,
-                      size: 28,
-                    ),
-                  ),
-                ),
-              ],
               flexibleSpace: FlexibleSpaceBar(
                 titlePadding: const EdgeInsets.only(left: 16, bottom: 12),
-                title: const Text(
-                  'Messages',
-                  style: TextStyle(
-                    color: AppTheme.textDark,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 8.0,
-                ),
-                child: CustomTextField(
-                  controller: _searchController,
-                  hintText: 'Search',
-                  prefixIcon: const Padding(
-                    padding: EdgeInsets.only(left: 12.0, bottom: 8.0),
-                    child: Icon(
-                      CupertinoIcons.search,
-                      color: Color(0xFF8E8E93),
-                      size: 20,
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text(
+                      'Сообщения',
+                      style: TextStyle(
+                        color: AppTheme.textDark,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.5,
+                      ),
                     ),
-                  ),
+                    BounceButton(
+                      onPressed: () {
+                        final state = context.read<ChatListBloc>().state;
+                        if (state is LoadedState) {
+                          _showNewMessageSheet(context, state.userCache);
+                        }
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 16.0),
+                        child: Icon(
+                          CupertinoIcons.square_pencil,
+                          color: AppTheme.iMessageBlue,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -196,68 +166,49 @@ class _ChatListScreenState extends State<ChatListScreen> {
                       final otherUser = state.userCache[otherUserId];
                       final otherUserName = otherUser?.name ?? 'Unknown';
 
-                      return BounceButton(
-                        onPressed: () {
-                          context.push('/chats/${room.id}');
-                        },
-                        child: Column(
-                          children: [
-                            ListTile(
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                                vertical: 4.0,
-                              ),
-                              leading: CircleAvatar(
-                                radius: 26,
-                                backgroundColor: const Color(0xFFE5E5EA),
-                                child: Text(
-                                  otherUserName[0].toUpperCase(),
-                                  style: const TextStyle(
-                                    color: AppTheme.textDark,
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                              title: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    otherUserName,
+                      return Column(
+                        children: [
+                          UserTile(
+                            onTap: () {
+                              context.push('/chats/${room.id}', extra: otherUserName);
+                            },
+                            title: otherUserName,
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.only(top: 4.0),
+                                  child: Text(
+                                    room.lastMessage != null
+                                        ? '${room.lastMessage!.senderId == currentUserId ? "Вы: " : ""}${room.lastMessage!.text}'
+                                        : 'Новый чат',
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 16,
+                                      color: Color(0xFF8E8E93),
+                                      fontSize: 15,
                                     ),
-                                  ),
-                                  if (room.lastMessage != null)
-                                    Text(
-                                      _formatTime(room.lastMessage!.createdAt),
-                                      style: const TextStyle(
-                                        color: Color(0xFF8E8E93),
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                ],
-                              ),
-                              subtitle: Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: Text(
-                                  room.lastMessage?.text ?? 'New Chat',
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
-                                    color: Color(0xFF8E8E93),
-                                    fontSize: 15,
                                   ),
                                 ),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (room.lastMessage != null)
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 4.0),
+                                        child: Text(
+                                          _formatTime(room.lastMessage!.createdAt),
+                                          style: const TextStyle(
+                                            color: Color(0xFF8E8E93),
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ),
+                                    const Icon(
+                                      CupertinoIcons.chevron_right,
+                                      color: Color(0xFFC7C7CC),
+                                      size: 20,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              trailing: const Icon(
-                                CupertinoIcons.chevron_right,
-                                color: Color(0xFFC7C7CC),
-                                size: 20,
-                              ),
-                            ),
                             const Padding(
                               padding: EdgeInsets.only(left: 84.0),
                               child: Divider(
@@ -266,9 +217,8 @@ class _ChatListScreenState extends State<ChatListScreen> {
                               ),
                             ),
                           ],
-                        ),
-                      );
-                    }, childCount: state.rooms.length),
+                        );
+                      }, childCount: state.rooms.length),
                   );
                 }
 

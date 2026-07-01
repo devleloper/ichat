@@ -9,11 +9,13 @@ import 'presentation/features/auth/bloc/auth_bloc.dart';
 import 'presentation/features/chat_list/bloc/chat_list_bloc.dart';
 import 'presentation/router/app_router.dart';
 import 'presentation/theme/app_theme.dart';
+import 'core/config/app_config.dart';
 
 void main() {
-  // Initialize Data Layer
-  final apiClient = ApiClient();
-  final wsClient = WebSocketClient();
+  const config = AppConfig.local;
+
+  final apiClient = ApiClient(baseUrl: config.apiBaseUrl);
+  final wsClient = WebSocketClient(baseUrl: config.wsBaseUrl);
 
   final authRepository = AuthRepository(apiClient);
   final chatRepository = ChatRepository(apiClient, wsClient);
@@ -26,9 +28,7 @@ void main() {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<AuthBloc>(
-            create: (context) => AuthBloc(authRepository),
-          ),
+          BlocProvider<AuthBloc>(create: (context) => AuthBloc(authRepository)),
           BlocProvider<ChatListBloc>(
             create: (context) => ChatListBloc(chatRepository, authRepository),
           ),

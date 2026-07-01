@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../theme/app_theme.dart';
 import '../../../widgets/bounce_button.dart';
 import '../../../widgets/custom_text_field.dart';
+import '../../../widgets/user_tile.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -40,44 +41,43 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Who are you?'),
-        centerTitle: true,
-      ),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthenticatedState) {
             context.go('/chats');
           } else if (state is ErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
           return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text(
-                    'Create New User',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                  child: Text(
+                    'Создать пользователя',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  CustomTextField(
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: CustomTextField(
                     controller: _nameController,
-                    hintText: 'Enter your name...',
+                    hintText: 'Введите ваше имя...',
                     onSubmitted: _onCreateUser,
                     suffixIcon: BounceButton(
                       onPressed: _onCreateUser,
                       child: Container(
-                        margin: const EdgeInsets.only(right: 8, bottom: 6),
+                        margin: const EdgeInsets.all(8),
                         padding: const EdgeInsets.all(6),
                         decoration: const BoxDecoration(
                           color: AppTheme.iMessageBlue,
@@ -91,54 +91,61 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 32),
-                  const Text(
-                    'Or Select Existing',
+                ),
+                const SizedBox(height: 32),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text(
+                    'Выбрать',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Expanded(
-                    child: switch (state) {
-                      LoadingState() => const Center(child: CircularProgressIndicator()),
-                      UsersLoadedState(users: final users) => users.isEmpty
-                          ? const Center(child: Text('No users found. Create one above!'))
-                          : ListView.separated(
+                ),
+                const SizedBox(height: 16),
+                Expanded(
+                  child: switch (state) {
+                    LoadingState() => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    UsersLoadedState(users: final users) =>
+                      users.isEmpty
+                          ? const Center(
+                              child: Text(
+                                'Пользователи не найдены. Создайте выше!',
+                              ),
+                            )
+                          : ListView.builder(
                               itemCount: users.length,
-                              separatorBuilder: (context, index) => const Divider(),
                               itemBuilder: (context, index) {
                                 final user = users[index];
-                                return BounceButton(
-                                  onPressed: () {
-                                    context.read<AuthBloc>().add(AuthEvent.selectUser(user));
-                                  },
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: AppTheme.receiverGray,
-                                      child: Text(
-                                        user.name.substring(0, 1).toUpperCase(),
-                                        style: const TextStyle(
-                                          color: AppTheme.textDark,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                return Column(
+                                  children: [
+                                    UserTile(
+                                      title: user.name,
+                                      onTap: () {
+                                        context.read<AuthBloc>().add(
+                                          AuthEvent.selectUser(user),
+                                        );
+                                      },
+                                    ),
+                                    const Padding(
+                                      padding: EdgeInsets.only(left: 84.0),
+                                      child: Divider(
+                                        height: 1,
+                                        color: Color(0xFFE5E5EA),
                                       ),
                                     ),
-                                    title: Text(
-                                      user.name,
-                                      style: AppTheme.lightTheme.textTheme.bodyLarge,
-                                    ),
-                                  ),
+                                  ],
                                 );
                               },
                             ),
-                      _ => const SizedBox.shrink(),
-                    },
-                  ),
-                ],
-              ),
+                    _ => const SizedBox.shrink(),
+                  },
+                ),
+              ],
             ),
           );
         },

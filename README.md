@@ -1,2 +1,1 @@
-# ichat
-
+# iChat Client
