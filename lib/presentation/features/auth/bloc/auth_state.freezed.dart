@@ -56,14 +56,14 @@ extension AuthStatePatterns on AuthState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( InitialState value)?  initial,TResult Function( LoadingState value)?  loading,TResult Function( UsersLoadedState value)?  usersLoaded,TResult Function( AuthenticatedState value)?  authenticated,TResult Function( ErrorState value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AuthInitialState value)?  initial,TResult Function( AuthLoadingState value)?  loading,TResult Function( AuthUsersLoadedState value)?  usersLoaded,TResult Function( AuthAuthenticatedState value)?  authenticated,TResult Function( AuthErrorState value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case InitialState() when initial != null:
-return initial(_that);case LoadingState() when loading != null:
-return loading(_that);case UsersLoadedState() when usersLoaded != null:
-return usersLoaded(_that);case AuthenticatedState() when authenticated != null:
-return authenticated(_that);case ErrorState() when error != null:
+case AuthInitialState() when initial != null:
+return initial(_that);case AuthLoadingState() when loading != null:
+return loading(_that);case AuthUsersLoadedState() when usersLoaded != null:
+return usersLoaded(_that);case AuthAuthenticatedState() when authenticated != null:
+return authenticated(_that);case AuthErrorState() when error != null:
 return error(_that);case _:
   return orElse();
 
@@ -82,18 +82,15 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( InitialState value)  initial,required TResult Function( LoadingState value)  loading,required TResult Function( UsersLoadedState value)  usersLoaded,required TResult Function( AuthenticatedState value)  authenticated,required TResult Function( ErrorState value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AuthInitialState value)  initial,required TResult Function( AuthLoadingState value)  loading,required TResult Function( AuthUsersLoadedState value)  usersLoaded,required TResult Function( AuthAuthenticatedState value)  authenticated,required TResult Function( AuthErrorState value)  error,}){
 final _that = this;
 switch (_that) {
-case InitialState():
-return initial(_that);case LoadingState():
-return loading(_that);case UsersLoadedState():
-return usersLoaded(_that);case AuthenticatedState():
-return authenticated(_that);case ErrorState():
-return error(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case AuthInitialState():
+return initial(_that);case AuthLoadingState():
+return loading(_that);case AuthUsersLoadedState():
+return usersLoaded(_that);case AuthAuthenticatedState():
+return authenticated(_that);case AuthErrorState():
+return error(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -107,14 +104,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( InitialState value)?  initial,TResult? Function( LoadingState value)?  loading,TResult? Function( UsersLoadedState value)?  usersLoaded,TResult? Function( AuthenticatedState value)?  authenticated,TResult? Function( ErrorState value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AuthInitialState value)?  initial,TResult? Function( AuthLoadingState value)?  loading,TResult? Function( AuthUsersLoadedState value)?  usersLoaded,TResult? Function( AuthAuthenticatedState value)?  authenticated,TResult? Function( AuthErrorState value)?  error,}){
 final _that = this;
 switch (_that) {
-case InitialState() when initial != null:
-return initial(_that);case LoadingState() when loading != null:
-return loading(_that);case UsersLoadedState() when usersLoaded != null:
-return usersLoaded(_that);case AuthenticatedState() when authenticated != null:
-return authenticated(_that);case ErrorState() when error != null:
+case AuthInitialState() when initial != null:
+return initial(_that);case AuthLoadingState() when loading != null:
+return loading(_that);case AuthUsersLoadedState() when usersLoaded != null:
+return usersLoaded(_that);case AuthAuthenticatedState() when authenticated != null:
+return authenticated(_that);case AuthErrorState() when error != null:
 return error(_that);case _:
   return null;
 
@@ -134,11 +131,11 @@ return error(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<User> users)?  usersLoaded,TResult Function( User user)?  authenticated,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case InitialState() when initial != null:
-return initial();case LoadingState() when loading != null:
-return loading();case UsersLoadedState() when usersLoaded != null:
-return usersLoaded(_that.users);case AuthenticatedState() when authenticated != null:
-return authenticated(_that.user);case ErrorState() when error != null:
+case AuthInitialState() when initial != null:
+return initial();case AuthLoadingState() when loading != null:
+return loading();case AuthUsersLoadedState() when usersLoaded != null:
+return usersLoaded(_that.users);case AuthAuthenticatedState() when authenticated != null:
+return authenticated(_that.user);case AuthErrorState() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -159,15 +156,12 @@ return error(_that.message);case _:
 
 @optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<User> users)  usersLoaded,required TResult Function( User user)  authenticated,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
-case InitialState():
-return initial();case LoadingState():
-return loading();case UsersLoadedState():
-return usersLoaded(_that.users);case AuthenticatedState():
-return authenticated(_that.user);case ErrorState():
-return error(_that.message);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case AuthInitialState():
+return initial();case AuthLoadingState():
+return loading();case AuthUsersLoadedState():
+return usersLoaded(_that.users);case AuthAuthenticatedState():
+return authenticated(_that.user);case AuthErrorState():
+return error(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -183,11 +177,11 @@ return error(_that.message);case _:
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<User> users)?  usersLoaded,TResult? Function( User user)?  authenticated,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
-case InitialState() when initial != null:
-return initial();case LoadingState() when loading != null:
-return loading();case UsersLoadedState() when usersLoaded != null:
-return usersLoaded(_that.users);case AuthenticatedState() when authenticated != null:
-return authenticated(_that.user);case ErrorState() when error != null:
+case AuthInitialState() when initial != null:
+return initial();case AuthLoadingState() when loading != null:
+return loading();case AuthUsersLoadedState() when usersLoaded != null:
+return usersLoaded(_that.users);case AuthAuthenticatedState() when authenticated != null:
+return authenticated(_that.user);case AuthErrorState() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -199,8 +193,8 @@ return error(_that.message);case _:
 /// @nodoc
 
 
-class InitialState implements AuthState {
-  const InitialState();
+class AuthInitialState implements AuthState {
+  const AuthInitialState();
   
 
 
@@ -210,7 +204,7 @@ class InitialState implements AuthState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is InitialState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthInitialState);
 }
 
 
@@ -231,8 +225,8 @@ String toString() {
 /// @nodoc
 
 
-class LoadingState implements AuthState {
-  const LoadingState();
+class AuthLoadingState implements AuthState {
+  const AuthLoadingState();
   
 
 
@@ -242,7 +236,7 @@ class LoadingState implements AuthState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadingState);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthLoadingState);
 }
 
 
@@ -263,8 +257,8 @@ String toString() {
 /// @nodoc
 
 
-class UsersLoadedState implements AuthState {
-  const UsersLoadedState( List<User> users): _users = users;
+class AuthUsersLoadedState implements AuthState {
+  const AuthUsersLoadedState( List<User> users): _users = users;
   
 
  final  List<User> _users;
@@ -279,13 +273,13 @@ class UsersLoadedState implements AuthState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$UsersLoadedStateCopyWith<UsersLoadedState> get copyWith => _$UsersLoadedStateCopyWithImpl<UsersLoadedState>(this, _$identity);
+$AuthUsersLoadedStateCopyWith<AuthUsersLoadedState> get copyWith => _$AuthUsersLoadedStateCopyWithImpl<AuthUsersLoadedState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsersLoadedState&&const DeepCollectionEquality().equals(other._users, _users));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthUsersLoadedState&&const DeepCollectionEquality().equals(other._users, _users));
 }
 
 
@@ -301,8 +295,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $UsersLoadedStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
-  factory $UsersLoadedStateCopyWith(UsersLoadedState value, $Res Function(UsersLoadedState) _then) = _$UsersLoadedStateCopyWithImpl;
+abstract mixin class $AuthUsersLoadedStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
+  factory $AuthUsersLoadedStateCopyWith(AuthUsersLoadedState value, $Res Function(AuthUsersLoadedState) _then) = _$AuthUsersLoadedStateCopyWithImpl;
 @useResult
 $Res call({
  List<User> users
@@ -313,17 +307,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$UsersLoadedStateCopyWithImpl<$Res>
-    implements $UsersLoadedStateCopyWith<$Res> {
-  _$UsersLoadedStateCopyWithImpl(this._self, this._then);
+class _$AuthUsersLoadedStateCopyWithImpl<$Res>
+    implements $AuthUsersLoadedStateCopyWith<$Res> {
+  _$AuthUsersLoadedStateCopyWithImpl(this._self, this._then);
 
-  final UsersLoadedState _self;
-  final $Res Function(UsersLoadedState) _then;
+  final AuthUsersLoadedState _self;
+  final $Res Function(AuthUsersLoadedState) _then;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? users = null,}) {
-  return _then(UsersLoadedState(
+  return _then(AuthUsersLoadedState(
 null == users ? _self._users : users // ignore: cast_nullable_to_non_nullable
 as List<User>,
   ));
@@ -335,8 +329,8 @@ as List<User>,
 /// @nodoc
 
 
-class AuthenticatedState implements AuthState {
-  const AuthenticatedState(this.user);
+class AuthAuthenticatedState implements AuthState {
+  const AuthAuthenticatedState(this.user);
   
 
  final  User user;
@@ -345,13 +339,13 @@ class AuthenticatedState implements AuthState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$AuthenticatedStateCopyWith<AuthenticatedState> get copyWith => _$AuthenticatedStateCopyWithImpl<AuthenticatedState>(this, _$identity);
+$AuthAuthenticatedStateCopyWith<AuthAuthenticatedState> get copyWith => _$AuthAuthenticatedStateCopyWithImpl<AuthAuthenticatedState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthenticatedState&&(identical(other.user, user) || other.user == user));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthAuthenticatedState&&(identical(other.user, user) || other.user == user));
 }
 
 
@@ -367,42 +361,51 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $AuthenticatedStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
-  factory $AuthenticatedStateCopyWith(AuthenticatedState value, $Res Function(AuthenticatedState) _then) = _$AuthenticatedStateCopyWithImpl;
+abstract mixin class $AuthAuthenticatedStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
+  factory $AuthAuthenticatedStateCopyWith(AuthAuthenticatedState value, $Res Function(AuthAuthenticatedState) _then) = _$AuthAuthenticatedStateCopyWithImpl;
 @useResult
 $Res call({
  User user
 });
 
 
-
+$UserCopyWith<$Res> get user;
 
 }
 /// @nodoc
-class _$AuthenticatedStateCopyWithImpl<$Res>
-    implements $AuthenticatedStateCopyWith<$Res> {
-  _$AuthenticatedStateCopyWithImpl(this._self, this._then);
+class _$AuthAuthenticatedStateCopyWithImpl<$Res>
+    implements $AuthAuthenticatedStateCopyWith<$Res> {
+  _$AuthAuthenticatedStateCopyWithImpl(this._self, this._then);
 
-  final AuthenticatedState _self;
-  final $Res Function(AuthenticatedState) _then;
+  final AuthAuthenticatedState _self;
+  final $Res Function(AuthAuthenticatedState) _then;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
-  return _then(AuthenticatedState(
+  return _then(AuthAuthenticatedState(
 null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as User,
   ));
 }
 
-
+/// Create a copy of AuthState
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserCopyWith<$Res> get user {
+  
+  return $UserCopyWith<$Res>(_self.user, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
 }
 
 /// @nodoc
 
 
-class ErrorState implements AuthState {
-  const ErrorState(this.message);
+class AuthErrorState implements AuthState {
+  const AuthErrorState(this.message);
   
 
  final  String message;
@@ -411,13 +414,13 @@ class ErrorState implements AuthState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$ErrorStateCopyWith<ErrorState> get copyWith => _$ErrorStateCopyWithImpl<ErrorState>(this, _$identity);
+$AuthErrorStateCopyWith<AuthErrorState> get copyWith => _$AuthErrorStateCopyWithImpl<AuthErrorState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ErrorState&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthErrorState&&(identical(other.message, message) || other.message == message));
 }
 
 
@@ -433,8 +436,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $ErrorStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
-  factory $ErrorStateCopyWith(ErrorState value, $Res Function(ErrorState) _then) = _$ErrorStateCopyWithImpl;
+abstract mixin class $AuthErrorStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
+  factory $AuthErrorStateCopyWith(AuthErrorState value, $Res Function(AuthErrorState) _then) = _$AuthErrorStateCopyWithImpl;
 @useResult
 $Res call({
  String message
@@ -445,17 +448,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$ErrorStateCopyWithImpl<$Res>
-    implements $ErrorStateCopyWith<$Res> {
-  _$ErrorStateCopyWithImpl(this._self, this._then);
+class _$AuthErrorStateCopyWithImpl<$Res>
+    implements $AuthErrorStateCopyWith<$Res> {
+  _$AuthErrorStateCopyWithImpl(this._self, this._then);
 
-  final ErrorState _self;
-  final $Res Function(ErrorState) _then;
+  final AuthErrorState _self;
+  final $Res Function(AuthErrorState) _then;
 
 /// Create a copy of AuthState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(ErrorState(
+  return _then(AuthErrorState(
 null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,
   ));

@@ -56,16 +56,16 @@ extension ChatRoomEventPatterns on ChatRoomEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadMessagesEvent value)?  loadMessages,TResult Function( SendMessageEvent value)?  sendMessage,TResult Function( MessageReceivedEvent value)?  messageReceived,TResult Function( MessageErrorEvent value)?  messageError,TResult Function( SendTypingEvent value)?  sendTyping,TResult Function( UserTypingEvent value)?  userTyping,TResult Function( ResetTypingEvent value)?  resetTyping,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ChatRoomLoadMessagesEvent value)?  loadMessages,TResult Function( ChatRoomSendMessageEvent value)?  sendMessage,TResult Function( ChatRoomMessageReceivedEvent value)?  messageReceived,TResult Function( ChatRoomMessageErrorEvent value)?  messageError,TResult Function( ChatRoomSendTypingEvent value)?  sendTyping,TResult Function( ChatRoomUserTypingEvent value)?  userTyping,TResult Function( ChatRoomResetTypingEvent value)?  resetTyping,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case LoadMessagesEvent() when loadMessages != null:
-return loadMessages(_that);case SendMessageEvent() when sendMessage != null:
-return sendMessage(_that);case MessageReceivedEvent() when messageReceived != null:
-return messageReceived(_that);case MessageErrorEvent() when messageError != null:
-return messageError(_that);case SendTypingEvent() when sendTyping != null:
-return sendTyping(_that);case UserTypingEvent() when userTyping != null:
-return userTyping(_that);case ResetTypingEvent() when resetTyping != null:
+case ChatRoomLoadMessagesEvent() when loadMessages != null:
+return loadMessages(_that);case ChatRoomSendMessageEvent() when sendMessage != null:
+return sendMessage(_that);case ChatRoomMessageReceivedEvent() when messageReceived != null:
+return messageReceived(_that);case ChatRoomMessageErrorEvent() when messageError != null:
+return messageError(_that);case ChatRoomSendTypingEvent() when sendTyping != null:
+return sendTyping(_that);case ChatRoomUserTypingEvent() when userTyping != null:
+return userTyping(_that);case ChatRoomResetTypingEvent() when resetTyping != null:
 return resetTyping(_that);case _:
   return orElse();
 
@@ -84,16 +84,16 @@ return resetTyping(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadMessagesEvent value)  loadMessages,required TResult Function( SendMessageEvent value)  sendMessage,required TResult Function( MessageReceivedEvent value)  messageReceived,required TResult Function( MessageErrorEvent value)  messageError,required TResult Function( SendTypingEvent value)  sendTyping,required TResult Function( UserTypingEvent value)  userTyping,required TResult Function( ResetTypingEvent value)  resetTyping,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ChatRoomLoadMessagesEvent value)  loadMessages,required TResult Function( ChatRoomSendMessageEvent value)  sendMessage,required TResult Function( ChatRoomMessageReceivedEvent value)  messageReceived,required TResult Function( ChatRoomMessageErrorEvent value)  messageError,required TResult Function( ChatRoomSendTypingEvent value)  sendTyping,required TResult Function( ChatRoomUserTypingEvent value)  userTyping,required TResult Function( ChatRoomResetTypingEvent value)  resetTyping,}){
 final _that = this;
 switch (_that) {
-case LoadMessagesEvent():
-return loadMessages(_that);case SendMessageEvent():
-return sendMessage(_that);case MessageReceivedEvent():
-return messageReceived(_that);case MessageErrorEvent():
-return messageError(_that);case SendTypingEvent():
-return sendTyping(_that);case UserTypingEvent():
-return userTyping(_that);case ResetTypingEvent():
+case ChatRoomLoadMessagesEvent():
+return loadMessages(_that);case ChatRoomSendMessageEvent():
+return sendMessage(_that);case ChatRoomMessageReceivedEvent():
+return messageReceived(_that);case ChatRoomMessageErrorEvent():
+return messageError(_that);case ChatRoomSendTypingEvent():
+return sendTyping(_that);case ChatRoomUserTypingEvent():
+return userTyping(_that);case ChatRoomResetTypingEvent():
 return resetTyping(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
@@ -108,16 +108,16 @@ return resetTyping(_that);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadMessagesEvent value)?  loadMessages,TResult? Function( SendMessageEvent value)?  sendMessage,TResult? Function( MessageReceivedEvent value)?  messageReceived,TResult? Function( MessageErrorEvent value)?  messageError,TResult? Function( SendTypingEvent value)?  sendTyping,TResult? Function( UserTypingEvent value)?  userTyping,TResult? Function( ResetTypingEvent value)?  resetTyping,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ChatRoomLoadMessagesEvent value)?  loadMessages,TResult? Function( ChatRoomSendMessageEvent value)?  sendMessage,TResult? Function( ChatRoomMessageReceivedEvent value)?  messageReceived,TResult? Function( ChatRoomMessageErrorEvent value)?  messageError,TResult? Function( ChatRoomSendTypingEvent value)?  sendTyping,TResult? Function( ChatRoomUserTypingEvent value)?  userTyping,TResult? Function( ChatRoomResetTypingEvent value)?  resetTyping,}){
 final _that = this;
 switch (_that) {
-case LoadMessagesEvent() when loadMessages != null:
-return loadMessages(_that);case SendMessageEvent() when sendMessage != null:
-return sendMessage(_that);case MessageReceivedEvent() when messageReceived != null:
-return messageReceived(_that);case MessageErrorEvent() when messageError != null:
-return messageError(_that);case SendTypingEvent() when sendTyping != null:
-return sendTyping(_that);case UserTypingEvent() when userTyping != null:
-return userTyping(_that);case ResetTypingEvent() when resetTyping != null:
+case ChatRoomLoadMessagesEvent() when loadMessages != null:
+return loadMessages(_that);case ChatRoomSendMessageEvent() when sendMessage != null:
+return sendMessage(_that);case ChatRoomMessageReceivedEvent() when messageReceived != null:
+return messageReceived(_that);case ChatRoomMessageErrorEvent() when messageError != null:
+return messageError(_that);case ChatRoomSendTypingEvent() when sendTyping != null:
+return sendTyping(_that);case ChatRoomUserTypingEvent() when userTyping != null:
+return userTyping(_that);case ChatRoomResetTypingEvent() when resetTyping != null:
 return resetTyping(_that);case _:
   return null;
 
@@ -137,13 +137,13 @@ return resetTyping(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadMessages,TResult Function( String text)?  sendMessage,TResult Function( Message message)?  messageReceived,TResult Function( String clientMessageId,  String error)?  messageError,TResult Function()?  sendTyping,TResult Function( String userId)?  userTyping,TResult Function()?  resetTyping,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case LoadMessagesEvent() when loadMessages != null:
-return loadMessages();case SendMessageEvent() when sendMessage != null:
-return sendMessage(_that.text);case MessageReceivedEvent() when messageReceived != null:
-return messageReceived(_that.message);case MessageErrorEvent() when messageError != null:
-return messageError(_that.clientMessageId,_that.error);case SendTypingEvent() when sendTyping != null:
-return sendTyping();case UserTypingEvent() when userTyping != null:
-return userTyping(_that.userId);case ResetTypingEvent() when resetTyping != null:
+case ChatRoomLoadMessagesEvent() when loadMessages != null:
+return loadMessages();case ChatRoomSendMessageEvent() when sendMessage != null:
+return sendMessage(_that.text);case ChatRoomMessageReceivedEvent() when messageReceived != null:
+return messageReceived(_that.message);case ChatRoomMessageErrorEvent() when messageError != null:
+return messageError(_that.clientMessageId,_that.error);case ChatRoomSendTypingEvent() when sendTyping != null:
+return sendTyping();case ChatRoomUserTypingEvent() when userTyping != null:
+return userTyping(_that.userId);case ChatRoomResetTypingEvent() when resetTyping != null:
 return resetTyping();case _:
   return orElse();
 
@@ -164,13 +164,13 @@ return resetTyping();case _:
 
 @optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadMessages,required TResult Function( String text)  sendMessage,required TResult Function( Message message)  messageReceived,required TResult Function( String clientMessageId,  String error)  messageError,required TResult Function()  sendTyping,required TResult Function( String userId)  userTyping,required TResult Function()  resetTyping,}) {final _that = this;
 switch (_that) {
-case LoadMessagesEvent():
-return loadMessages();case SendMessageEvent():
-return sendMessage(_that.text);case MessageReceivedEvent():
-return messageReceived(_that.message);case MessageErrorEvent():
-return messageError(_that.clientMessageId,_that.error);case SendTypingEvent():
-return sendTyping();case UserTypingEvent():
-return userTyping(_that.userId);case ResetTypingEvent():
+case ChatRoomLoadMessagesEvent():
+return loadMessages();case ChatRoomSendMessageEvent():
+return sendMessage(_that.text);case ChatRoomMessageReceivedEvent():
+return messageReceived(_that.message);case ChatRoomMessageErrorEvent():
+return messageError(_that.clientMessageId,_that.error);case ChatRoomSendTypingEvent():
+return sendTyping();case ChatRoomUserTypingEvent():
+return userTyping(_that.userId);case ChatRoomResetTypingEvent():
 return resetTyping();}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -187,13 +187,13 @@ return resetTyping();}
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadMessages,TResult? Function( String text)?  sendMessage,TResult? Function( Message message)?  messageReceived,TResult? Function( String clientMessageId,  String error)?  messageError,TResult? Function()?  sendTyping,TResult? Function( String userId)?  userTyping,TResult? Function()?  resetTyping,}) {final _that = this;
 switch (_that) {
-case LoadMessagesEvent() when loadMessages != null:
-return loadMessages();case SendMessageEvent() when sendMessage != null:
-return sendMessage(_that.text);case MessageReceivedEvent() when messageReceived != null:
-return messageReceived(_that.message);case MessageErrorEvent() when messageError != null:
-return messageError(_that.clientMessageId,_that.error);case SendTypingEvent() when sendTyping != null:
-return sendTyping();case UserTypingEvent() when userTyping != null:
-return userTyping(_that.userId);case ResetTypingEvent() when resetTyping != null:
+case ChatRoomLoadMessagesEvent() when loadMessages != null:
+return loadMessages();case ChatRoomSendMessageEvent() when sendMessage != null:
+return sendMessage(_that.text);case ChatRoomMessageReceivedEvent() when messageReceived != null:
+return messageReceived(_that.message);case ChatRoomMessageErrorEvent() when messageError != null:
+return messageError(_that.clientMessageId,_that.error);case ChatRoomSendTypingEvent() when sendTyping != null:
+return sendTyping();case ChatRoomUserTypingEvent() when userTyping != null:
+return userTyping(_that.userId);case ChatRoomResetTypingEvent() when resetTyping != null:
 return resetTyping();case _:
   return null;
 
@@ -205,8 +205,8 @@ return resetTyping();case _:
 /// @nodoc
 
 
-class LoadMessagesEvent implements ChatRoomEvent {
-  const LoadMessagesEvent();
+class ChatRoomLoadMessagesEvent implements ChatRoomEvent {
+  const ChatRoomLoadMessagesEvent();
   
 
 
@@ -216,7 +216,7 @@ class LoadMessagesEvent implements ChatRoomEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadMessagesEvent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatRoomLoadMessagesEvent);
 }
 
 
@@ -237,8 +237,8 @@ String toString() {
 /// @nodoc
 
 
-class SendMessageEvent implements ChatRoomEvent {
-  const SendMessageEvent(this.text);
+class ChatRoomSendMessageEvent implements ChatRoomEvent {
+  const ChatRoomSendMessageEvent(this.text);
   
 
  final  String text;
@@ -247,13 +247,13 @@ class SendMessageEvent implements ChatRoomEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$SendMessageEventCopyWith<SendMessageEvent> get copyWith => _$SendMessageEventCopyWithImpl<SendMessageEvent>(this, _$identity);
+$ChatRoomSendMessageEventCopyWith<ChatRoomSendMessageEvent> get copyWith => _$ChatRoomSendMessageEventCopyWithImpl<ChatRoomSendMessageEvent>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SendMessageEvent&&(identical(other.text, text) || other.text == text));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatRoomSendMessageEvent&&(identical(other.text, text) || other.text == text));
 }
 
 
@@ -269,8 +269,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $SendMessageEventCopyWith<$Res> implements $ChatRoomEventCopyWith<$Res> {
-  factory $SendMessageEventCopyWith(SendMessageEvent value, $Res Function(SendMessageEvent) _then) = _$SendMessageEventCopyWithImpl;
+abstract mixin class $ChatRoomSendMessageEventCopyWith<$Res> implements $ChatRoomEventCopyWith<$Res> {
+  factory $ChatRoomSendMessageEventCopyWith(ChatRoomSendMessageEvent value, $Res Function(ChatRoomSendMessageEvent) _then) = _$ChatRoomSendMessageEventCopyWithImpl;
 @useResult
 $Res call({
  String text
@@ -281,17 +281,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$SendMessageEventCopyWithImpl<$Res>
-    implements $SendMessageEventCopyWith<$Res> {
-  _$SendMessageEventCopyWithImpl(this._self, this._then);
+class _$ChatRoomSendMessageEventCopyWithImpl<$Res>
+    implements $ChatRoomSendMessageEventCopyWith<$Res> {
+  _$ChatRoomSendMessageEventCopyWithImpl(this._self, this._then);
 
-  final SendMessageEvent _self;
-  final $Res Function(SendMessageEvent) _then;
+  final ChatRoomSendMessageEvent _self;
+  final $Res Function(ChatRoomSendMessageEvent) _then;
 
 /// Create a copy of ChatRoomEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? text = null,}) {
-  return _then(SendMessageEvent(
+  return _then(ChatRoomSendMessageEvent(
 null == text ? _self.text : text // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -303,8 +303,8 @@ as String,
 /// @nodoc
 
 
-class MessageReceivedEvent implements ChatRoomEvent {
-  const MessageReceivedEvent(this.message);
+class ChatRoomMessageReceivedEvent implements ChatRoomEvent {
+  const ChatRoomMessageReceivedEvent(this.message);
   
 
  final  Message message;
@@ -313,13 +313,13 @@ class MessageReceivedEvent implements ChatRoomEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$MessageReceivedEventCopyWith<MessageReceivedEvent> get copyWith => _$MessageReceivedEventCopyWithImpl<MessageReceivedEvent>(this, _$identity);
+$ChatRoomMessageReceivedEventCopyWith<ChatRoomMessageReceivedEvent> get copyWith => _$ChatRoomMessageReceivedEventCopyWithImpl<ChatRoomMessageReceivedEvent>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessageReceivedEvent&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatRoomMessageReceivedEvent&&(identical(other.message, message) || other.message == message));
 }
 
 
@@ -335,42 +335,51 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $MessageReceivedEventCopyWith<$Res> implements $ChatRoomEventCopyWith<$Res> {
-  factory $MessageReceivedEventCopyWith(MessageReceivedEvent value, $Res Function(MessageReceivedEvent) _then) = _$MessageReceivedEventCopyWithImpl;
+abstract mixin class $ChatRoomMessageReceivedEventCopyWith<$Res> implements $ChatRoomEventCopyWith<$Res> {
+  factory $ChatRoomMessageReceivedEventCopyWith(ChatRoomMessageReceivedEvent value, $Res Function(ChatRoomMessageReceivedEvent) _then) = _$ChatRoomMessageReceivedEventCopyWithImpl;
 @useResult
 $Res call({
  Message message
 });
 
 
-
+$MessageCopyWith<$Res> get message;
 
 }
 /// @nodoc
-class _$MessageReceivedEventCopyWithImpl<$Res>
-    implements $MessageReceivedEventCopyWith<$Res> {
-  _$MessageReceivedEventCopyWithImpl(this._self, this._then);
+class _$ChatRoomMessageReceivedEventCopyWithImpl<$Res>
+    implements $ChatRoomMessageReceivedEventCopyWith<$Res> {
+  _$ChatRoomMessageReceivedEventCopyWithImpl(this._self, this._then);
 
-  final MessageReceivedEvent _self;
-  final $Res Function(MessageReceivedEvent) _then;
+  final ChatRoomMessageReceivedEvent _self;
+  final $Res Function(ChatRoomMessageReceivedEvent) _then;
 
 /// Create a copy of ChatRoomEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(MessageReceivedEvent(
+  return _then(ChatRoomMessageReceivedEvent(
 null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as Message,
   ));
 }
 
-
+/// Create a copy of ChatRoomEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MessageCopyWith<$Res> get message {
+  
+  return $MessageCopyWith<$Res>(_self.message, (value) {
+    return _then(_self.copyWith(message: value));
+  });
+}
 }
 
 /// @nodoc
 
 
-class MessageErrorEvent implements ChatRoomEvent {
-  const MessageErrorEvent(this.clientMessageId, this.error);
+class ChatRoomMessageErrorEvent implements ChatRoomEvent {
+  const ChatRoomMessageErrorEvent(this.clientMessageId, this.error);
   
 
  final  String clientMessageId;
@@ -380,13 +389,13 @@ class MessageErrorEvent implements ChatRoomEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$MessageErrorEventCopyWith<MessageErrorEvent> get copyWith => _$MessageErrorEventCopyWithImpl<MessageErrorEvent>(this, _$identity);
+$ChatRoomMessageErrorEventCopyWith<ChatRoomMessageErrorEvent> get copyWith => _$ChatRoomMessageErrorEventCopyWithImpl<ChatRoomMessageErrorEvent>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessageErrorEvent&&(identical(other.clientMessageId, clientMessageId) || other.clientMessageId == clientMessageId)&&(identical(other.error, error) || other.error == error));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatRoomMessageErrorEvent&&(identical(other.clientMessageId, clientMessageId) || other.clientMessageId == clientMessageId)&&(identical(other.error, error) || other.error == error));
 }
 
 
@@ -402,8 +411,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $MessageErrorEventCopyWith<$Res> implements $ChatRoomEventCopyWith<$Res> {
-  factory $MessageErrorEventCopyWith(MessageErrorEvent value, $Res Function(MessageErrorEvent) _then) = _$MessageErrorEventCopyWithImpl;
+abstract mixin class $ChatRoomMessageErrorEventCopyWith<$Res> implements $ChatRoomEventCopyWith<$Res> {
+  factory $ChatRoomMessageErrorEventCopyWith(ChatRoomMessageErrorEvent value, $Res Function(ChatRoomMessageErrorEvent) _then) = _$ChatRoomMessageErrorEventCopyWithImpl;
 @useResult
 $Res call({
  String clientMessageId, String error
@@ -414,17 +423,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$MessageErrorEventCopyWithImpl<$Res>
-    implements $MessageErrorEventCopyWith<$Res> {
-  _$MessageErrorEventCopyWithImpl(this._self, this._then);
+class _$ChatRoomMessageErrorEventCopyWithImpl<$Res>
+    implements $ChatRoomMessageErrorEventCopyWith<$Res> {
+  _$ChatRoomMessageErrorEventCopyWithImpl(this._self, this._then);
 
-  final MessageErrorEvent _self;
-  final $Res Function(MessageErrorEvent) _then;
+  final ChatRoomMessageErrorEvent _self;
+  final $Res Function(ChatRoomMessageErrorEvent) _then;
 
 /// Create a copy of ChatRoomEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? clientMessageId = null,Object? error = null,}) {
-  return _then(MessageErrorEvent(
+  return _then(ChatRoomMessageErrorEvent(
 null == clientMessageId ? _self.clientMessageId : clientMessageId // ignore: cast_nullable_to_non_nullable
 as String,null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
 as String,
@@ -437,8 +446,8 @@ as String,
 /// @nodoc
 
 
-class SendTypingEvent implements ChatRoomEvent {
-  const SendTypingEvent();
+class ChatRoomSendTypingEvent implements ChatRoomEvent {
+  const ChatRoomSendTypingEvent();
   
 
 
@@ -448,7 +457,7 @@ class SendTypingEvent implements ChatRoomEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SendTypingEvent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatRoomSendTypingEvent);
 }
 
 
@@ -469,8 +478,8 @@ String toString() {
 /// @nodoc
 
 
-class UserTypingEvent implements ChatRoomEvent {
-  const UserTypingEvent(this.userId);
+class ChatRoomUserTypingEvent implements ChatRoomEvent {
+  const ChatRoomUserTypingEvent(this.userId);
   
 
  final  String userId;
@@ -479,13 +488,13 @@ class UserTypingEvent implements ChatRoomEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$UserTypingEventCopyWith<UserTypingEvent> get copyWith => _$UserTypingEventCopyWithImpl<UserTypingEvent>(this, _$identity);
+$ChatRoomUserTypingEventCopyWith<ChatRoomUserTypingEvent> get copyWith => _$ChatRoomUserTypingEventCopyWithImpl<ChatRoomUserTypingEvent>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is UserTypingEvent&&(identical(other.userId, userId) || other.userId == userId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatRoomUserTypingEvent&&(identical(other.userId, userId) || other.userId == userId));
 }
 
 
@@ -501,8 +510,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $UserTypingEventCopyWith<$Res> implements $ChatRoomEventCopyWith<$Res> {
-  factory $UserTypingEventCopyWith(UserTypingEvent value, $Res Function(UserTypingEvent) _then) = _$UserTypingEventCopyWithImpl;
+abstract mixin class $ChatRoomUserTypingEventCopyWith<$Res> implements $ChatRoomEventCopyWith<$Res> {
+  factory $ChatRoomUserTypingEventCopyWith(ChatRoomUserTypingEvent value, $Res Function(ChatRoomUserTypingEvent) _then) = _$ChatRoomUserTypingEventCopyWithImpl;
 @useResult
 $Res call({
  String userId
@@ -513,17 +522,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$UserTypingEventCopyWithImpl<$Res>
-    implements $UserTypingEventCopyWith<$Res> {
-  _$UserTypingEventCopyWithImpl(this._self, this._then);
+class _$ChatRoomUserTypingEventCopyWithImpl<$Res>
+    implements $ChatRoomUserTypingEventCopyWith<$Res> {
+  _$ChatRoomUserTypingEventCopyWithImpl(this._self, this._then);
 
-  final UserTypingEvent _self;
-  final $Res Function(UserTypingEvent) _then;
+  final ChatRoomUserTypingEvent _self;
+  final $Res Function(ChatRoomUserTypingEvent) _then;
 
 /// Create a copy of ChatRoomEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? userId = null,}) {
-  return _then(UserTypingEvent(
+  return _then(ChatRoomUserTypingEvent(
 null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -535,8 +544,8 @@ as String,
 /// @nodoc
 
 
-class ResetTypingEvent implements ChatRoomEvent {
-  const ResetTypingEvent();
+class ChatRoomResetTypingEvent implements ChatRoomEvent {
+  const ChatRoomResetTypingEvent();
   
 
 
@@ -546,7 +555,7 @@ class ResetTypingEvent implements ChatRoomEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ResetTypingEvent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatRoomResetTypingEvent);
 }
 
 

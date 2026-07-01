@@ -16,9 +16,13 @@ abstract class MessageDto with _$MessageDto {
 
   const MessageDto._();
 
-  factory MessageDto.fromJson(Map<String, dynamic> json) => _$MessageDtoFromJson(json);
+  factory MessageDto.fromJson(Map<String, dynamic> json) =>
+      _$MessageDtoFromJson(json);
 
-  Message toEntity({MessageStatus status = MessageStatus.sent, String? clientMessageId}) {
+  Message toEntity({
+    MessageStatus status = MessageStatus.sent,
+    String? clientMessageId,
+  }) {
     return Message(
       id: id,
       roomId: roomId,

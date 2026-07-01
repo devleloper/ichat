@@ -1,40 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'data/network/api_client.dart';
-import 'data/network/websocket_client.dart';
-import 'data/repositories/auth_repository.dart';
-import 'data/repositories/chat_repository.dart';
+import 'core/di/service_locator.dart';
 import 'presentation/features/auth/bloc/auth_bloc.dart';
+import 'presentation/features/auth/bloc/auth_event.dart';
 import 'presentation/features/chat_list/bloc/chat_list_bloc.dart';
 import 'presentation/router/app_router.dart';
 import 'presentation/theme/app_theme.dart';
-import 'core/config/app_config.dart';
 
-void main() {
-  const config = AppConfig.local;
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  final apiClient = ApiClient(baseUrl: config.apiBaseUrl);
-  final wsClient = WebSocketClient(baseUrl: config.wsBaseUrl);
-
-  final authRepository = AuthRepository(apiClient);
-  final chatRepository = ChatRepository(apiClient, wsClient);
+  await setupServiceLocator();
 
   runApp(
-    MultiRepositoryProvider(
+    MultiBlocProvider(
       providers: [
-        RepositoryProvider.value(value: authRepository),
-        RepositoryProvider.value(value: chatRepository),
-      ],
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<AuthBloc>(create: (context) => AuthBloc(authRepository)),
-          BlocProvider<ChatListBloc>(
-            create: (context) => ChatListBloc(chatRepository, authRepository),
+        BlocProvider<AuthBloc>(
+          create: (context) => AuthBloc(
+            authRepository: getIt(),
+            getUsersUseCase: getIt(),
+            createUserUseCase: getIt(),
+          )..add(const AuthEvent.checkSession()),
+        ),
+        BlocProvider<ChatListBloc>(
+          create: (context) => ChatListBloc(
+            chatRepository: getIt(),
+            authRepository: getIt(),
+            getRoomsUseCase: getIt(),
+            getUsersUseCase: getIt(),
           ),
-        ],
-        child: const IChatApp(),
-      ),
+        ),
+      ],
+      child: const IChatApp(),
     ),
   );
 }

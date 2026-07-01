@@ -7,16 +7,23 @@ import 'package:uuid/uuid.dart';
 import '../../../../domain/entities/message.dart';
 import '../../../../domain/repositories/i_auth_repository.dart';
 import '../../../../domain/repositories/i_chat_repository.dart';
+import '../../../../domain/usecases/connect_to_room_usecase.dart';
+import '../../../../domain/usecases/get_messages_usecase.dart';
+import '../../../../domain/usecases/send_message_usecase.dart';
 import 'chat_room_event.dart';
 import 'chat_room_state.dart';
 
 class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
   final IChatRepository _chatRepository;
   final IAuthRepository _authRepository;
+  final GetMessagesUseCase _getMessagesUseCase;
+  final SendMessageUseCase _sendMessageUseCase;
+  final ConnectToRoomUseCase _connectToRoomUseCase;
   final String _roomId;
-  
+
   StreamSubscription<Message>? _messageSubscription;
   StreamSubscription<String>? _typingSubscription;
+  StreamSubscription<void>? _readySubscription;
   Timer? _typingTimer;
   DateTime? _lastTypingSentTime;
   final _uuid = const Uuid();
@@ -24,25 +31,37 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
   ChatRoomBloc({
     required IChatRepository chatRepository,
     required IAuthRepository authRepository,
+    required GetMessagesUseCase getMessagesUseCase,
+    required SendMessageUseCase sendMessageUseCase,
+    required ConnectToRoomUseCase connectToRoomUseCase,
     required String roomId,
-  })  : _chatRepository = chatRepository,
-        _authRepository = authRepository,
-        _roomId = roomId,
-        super(const ChatRoomState.initial()) {
-    on<LoadMessagesEvent>(_onLoadMessages);
-    on<SendMessageEvent>(_onSendMessage);
-    on<MessageReceivedEvent>(_onMessageReceived);
-    on<MessageErrorEvent>(_onMessageError);
-    on<SendTypingEvent>(_onSendTyping);
-    on<UserTypingEvent>(_onUserTyping);
-    on<ResetTypingEvent>(_onResetTyping);
+  }) : _chatRepository = chatRepository,
+       _authRepository = authRepository,
+       _getMessagesUseCase = getMessagesUseCase,
+       _sendMessageUseCase = sendMessageUseCase,
+       _connectToRoomUseCase = connectToRoomUseCase,
+       _roomId = roomId,
+       super(const ChatRoomState.initial()) {
+    on<ChatRoomLoadMessagesEvent>(_onLoadMessages);
+    on<ChatRoomSendMessageEvent>(_onSendMessage);
+    on<ChatRoomMessageReceivedEvent>(_onMessageReceived);
+    on<ChatRoomMessageErrorEvent>(_onMessageError);
+    on<ChatRoomSendTypingEvent>(_onSendTyping);
+    on<ChatRoomUserTypingEvent>(_onUserTyping);
+    on<ChatRoomResetTypingEvent>(_onResetTyping);
 
     _messageSubscription = _chatRepository.messageStream.listen((message) {
-      add(ChatRoomEvent.messageReceived(message));
+      if (message.roomId == _roomId) {
+        add(ChatRoomEvent.messageReceived(message));
+      }
     });
 
     _typingSubscription = _chatRepository.typingStream.listen((userId) {
       add(ChatRoomEvent.userTyping(userId));
+    });
+
+    _readySubscription = _chatRepository.readyStream.listen((_) {
+      add(const ChatRoomEvent.loadMessages());
     });
   }
 
@@ -50,44 +69,67 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
   Future<void> close() {
     _messageSubscription?.cancel();
     _typingSubscription?.cancel();
+    _readySubscription?.cancel();
     _typingTimer?.cancel();
     _chatRepository.disconnect();
     return super.close();
   }
 
   Future<void> _onLoadMessages(
-    LoadMessagesEvent event,
+    ChatRoomLoadMessagesEvent event,
     Emitter<ChatRoomState> emit,
   ) async {
-    emit(const ChatRoomState.loading());
+    final currentState = state;
+    if (currentState is! ChatRoomLoadedState) {
+      emit(const ChatRoomState.loading());
+    }
     try {
-      final user = await _authRepository.getCurrentUser();
+      final user = _authRepository.currentUser;
       if (user == null) {
         emit(const ChatRoomState.error('User not authenticated'));
         return;
       }
 
-      final messages = await _chatRepository.getMessages(_roomId, user.id);
-      
-      await _chatRepository.connect(_roomId, user.id);
-      
+      final messages = await _getMessagesUseCase(_roomId, user.id);
+      await _connectToRoomUseCase(_roomId, user.id);
+
       final sortedMessages = List<Message>.from(messages)
         ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-      emit(ChatRoomState.loaded(messages: sortedMessages));
+      if (currentState is ChatRoomLoadedState) {
+        final pendingMessages = currentState.messages
+            .where((m) => m.status != MessageStatus.sent)
+            .toList();
+
+        for (final pending in pendingMessages) {
+          final isAlreadyInList = sortedMessages.any(
+            (m) =>
+                m.clientMessageId == pending.clientMessageId ||
+                (m.text == pending.text && m.senderId == pending.senderId),
+          );
+
+          if (!isAlreadyInList) {
+            sortedMessages.insert(0, pending);
+          }
+        }
+      }
+
+      emit(
+        ChatRoomState.loaded(messages: sortedMessages, currentUserId: user.id),
+      );
     } catch (e) {
       emit(ChatRoomState.error(e.toString()));
     }
   }
 
   Future<void> _onSendMessage(
-    SendMessageEvent event,
+    ChatRoomSendMessageEvent event,
     Emitter<ChatRoomState> emit,
   ) async {
     final currentState = state;
     if (currentState is! ChatRoomLoadedState) return;
 
-    final user = await _authRepository.getCurrentUser();
+    final user = _authRepository.currentUser;
     if (user == null) return;
 
     final clientMessageId = _uuid.v4();
@@ -101,22 +143,23 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
       clientMessageId: clientMessageId,
     );
 
-    final updatedMessages = List<Message>.from(currentState.messages)
-      ..insert(0, optimisticMessage);
-      
-    emit(ChatRoomState.loaded(messages: updatedMessages));
+    emit(
+      currentState.copyWith(
+        messages: [optimisticMessage, ...currentState.messages],
+      ),
+    );
 
     try {
-      await _chatRepository.sendMessage(optimisticMessage);
+      await _sendMessageUseCase(optimisticMessage);
     } catch (e) {
       add(ChatRoomEvent.messageError(clientMessageId, e.toString()));
     }
   }
 
-  Future<void> _onMessageReceived(
-    MessageReceivedEvent event,
+  void _onMessageReceived(
+    ChatRoomMessageReceivedEvent event,
     Emitter<ChatRoomState> emit,
-  ) async {
+  ) {
     final currentState = state;
     if (currentState is! ChatRoomLoadedState) return;
 
@@ -129,19 +172,19 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
       );
       if (index != -1) {
         updatedMessages[index] = incoming;
-        emit(ChatRoomState.loaded(messages: updatedMessages));
+        emit(currentState.copyWith(messages: updatedMessages));
         return;
       }
     }
 
     updatedMessages.insert(0, incoming);
-    emit(ChatRoomState.loaded(messages: updatedMessages, isOtherUserTyping: currentState.isOtherUserTyping));
+    emit(currentState.copyWith(messages: updatedMessages));
   }
 
-  Future<void> _onMessageError(
-    MessageErrorEvent event,
+  void _onMessageError(
+    ChatRoomMessageErrorEvent event,
     Emitter<ChatRoomState> emit,
-  ) async {
+  ) {
     final currentState = state;
     if (currentState is! ChatRoomLoadedState) return;
 
@@ -151,46 +194,49 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
     );
 
     if (index != -1) {
-      final oldMessage = updatedMessages[index];
-      updatedMessages[index] = Message(
-        id: oldMessage.id,
-        roomId: oldMessage.roomId,
-        senderId: oldMessage.senderId,
-        text: oldMessage.text,
+      updatedMessages[index] = updatedMessages[index].copyWith(
         status: MessageStatus.failed,
-        createdAt: oldMessage.createdAt,
-        clientMessageId: oldMessage.clientMessageId,
       );
-      emit(ChatRoomState.loaded(messages: updatedMessages, isOtherUserTyping: currentState.isOtherUserTyping));
+      emit(currentState.copyWith(messages: updatedMessages));
     }
   }
 
-  void _onSendTyping(SendTypingEvent event, Emitter<ChatRoomState> emit) {
+  void _onSendTyping(
+    ChatRoomSendTypingEvent event,
+    Emitter<ChatRoomState> emit,
+  ) {
     if (state is! ChatRoomLoadedState) return;
-    
+
     final now = DateTime.now();
-    if (_lastTypingSentTime == null || now.difference(_lastTypingSentTime!).inSeconds > 2) {
+    if (_lastTypingSentTime == null ||
+        now.difference(_lastTypingSentTime!).inSeconds > 2) {
       _lastTypingSentTime = now;
       _chatRepository.sendTyping();
     }
   }
 
-  Future<void> _onUserTyping(UserTypingEvent event, Emitter<ChatRoomState> emit) async {
+  Future<void> _onUserTyping(
+    ChatRoomUserTypingEvent event,
+    Emitter<ChatRoomState> emit,
+  ) async {
     final currentState = state;
     if (currentState is! ChatRoomLoadedState) return;
-    
-    final user = await _authRepository.getCurrentUser();
+
+    final user = _authRepository.currentUser;
     if (user == null || event.userId == user.id) return;
 
     emit(currentState.copyWith(isOtherUserTyping: true));
-    
+
     _typingTimer?.cancel();
     _typingTimer = Timer(const Duration(seconds: 3), () {
       add(const ChatRoomEvent.resetTyping());
     });
   }
 
-  void _onResetTyping(ResetTypingEvent event, Emitter<ChatRoomState> emit) {
+  void _onResetTyping(
+    ChatRoomResetTypingEvent event,
+    Emitter<ChatRoomState> emit,
+  ) {
     final currentState = state;
     if (currentState is ChatRoomLoadedState) {
       emit(currentState.copyWith(isOtherUserTyping: false));

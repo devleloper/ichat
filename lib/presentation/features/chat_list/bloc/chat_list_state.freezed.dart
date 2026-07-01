@@ -56,12 +56,12 @@ extension ChatListStatePatterns on ChatListState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ChatListInitialState value)?  initial,TResult Function( ChatListLoadingState value)?  loading,TResult Function( LoadedState value)?  loaded,TResult Function( ChatListErrorState value)?  error,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ChatListInitialState value)?  initial,TResult Function( ChatListLoadingState value)?  loading,TResult Function( ChatListLoadedState value)?  loaded,TResult Function( ChatListErrorState value)?  error,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
 case ChatListInitialState() when initial != null:
 return initial(_that);case ChatListLoadingState() when loading != null:
-return loading(_that);case LoadedState() when loaded != null:
+return loading(_that);case ChatListLoadedState() when loaded != null:
 return loaded(_that);case ChatListErrorState() when error != null:
 return error(_that);case _:
   return orElse();
@@ -81,17 +81,14 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ChatListInitialState value)  initial,required TResult Function( ChatListLoadingState value)  loading,required TResult Function( LoadedState value)  loaded,required TResult Function( ChatListErrorState value)  error,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ChatListInitialState value)  initial,required TResult Function( ChatListLoadingState value)  loading,required TResult Function( ChatListLoadedState value)  loaded,required TResult Function( ChatListErrorState value)  error,}){
 final _that = this;
 switch (_that) {
 case ChatListInitialState():
 return initial(_that);case ChatListLoadingState():
-return loading(_that);case LoadedState():
+return loading(_that);case ChatListLoadedState():
 return loaded(_that);case ChatListErrorState():
-return error(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return error(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -105,12 +102,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ChatListInitialState value)?  initial,TResult? Function( ChatListLoadingState value)?  loading,TResult? Function( LoadedState value)?  loaded,TResult? Function( ChatListErrorState value)?  error,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ChatListInitialState value)?  initial,TResult? Function( ChatListLoadingState value)?  loading,TResult? Function( ChatListLoadedState value)?  loaded,TResult? Function( ChatListErrorState value)?  error,}){
 final _that = this;
 switch (_that) {
 case ChatListInitialState() when initial != null:
 return initial(_that);case ChatListLoadingState() when loading != null:
-return loading(_that);case LoadedState() when loaded != null:
+return loading(_that);case ChatListLoadedState() when loaded != null:
 return loaded(_that);case ChatListErrorState() when error != null:
 return error(_that);case _:
   return null;
@@ -129,12 +126,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Room> rooms,  Map<String, User> userCache)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Room> rooms,  Map<String, User> userCache,  String currentUserId)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ChatListInitialState() when initial != null:
 return initial();case ChatListLoadingState() when loading != null:
-return loading();case LoadedState() when loaded != null:
-return loaded(_that.rooms,_that.userCache);case ChatListErrorState() when error != null:
+return loading();case ChatListLoadedState() when loaded != null:
+return loaded(_that.rooms,_that.userCache,_that.currentUserId);case ChatListErrorState() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -153,16 +150,13 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Room> rooms,  Map<String, User> userCache)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Room> rooms,  Map<String, User> userCache,  String currentUserId)  loaded,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case ChatListInitialState():
 return initial();case ChatListLoadingState():
-return loading();case LoadedState():
-return loaded(_that.rooms,_that.userCache);case ChatListErrorState():
-return error(_that.message);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return loading();case ChatListLoadedState():
+return loaded(_that.rooms,_that.userCache,_that.currentUserId);case ChatListErrorState():
+return error(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -176,12 +170,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Room> rooms,  Map<String, User> userCache)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Room> rooms,  Map<String, User> userCache,  String currentUserId)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case ChatListInitialState() when initial != null:
 return initial();case ChatListLoadingState() when loading != null:
-return loading();case LoadedState() when loaded != null:
-return loaded(_that.rooms,_that.userCache);case ChatListErrorState() when error != null:
+return loading();case ChatListLoadedState() when loaded != null:
+return loaded(_that.rooms,_that.userCache,_that.currentUserId);case ChatListErrorState() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -257,8 +251,8 @@ String toString() {
 /// @nodoc
 
 
-class LoadedState implements ChatListState {
-  const LoadedState( List<Room> rooms,  Map<String, User> userCache): _rooms = rooms,_userCache = userCache;
+class ChatListLoadedState implements ChatListState {
+  const ChatListLoadedState({required  List<Room> rooms, required  Map<String, User> userCache, required this.currentUserId}): _rooms = rooms,_userCache = userCache;
   
 
  final  List<Room> _rooms;
@@ -275,38 +269,39 @@ class LoadedState implements ChatListState {
   return EqualUnmodifiableMapView(_userCache);
 }
 
+ final  String currentUserId;
 
 /// Create a copy of ChatListState
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$LoadedStateCopyWith<LoadedState> get copyWith => _$LoadedStateCopyWithImpl<LoadedState>(this, _$identity);
+$ChatListLoadedStateCopyWith<ChatListLoadedState> get copyWith => _$ChatListLoadedStateCopyWithImpl<ChatListLoadedState>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadedState&&const DeepCollectionEquality().equals(other._rooms, _rooms)&&const DeepCollectionEquality().equals(other._userCache, _userCache));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatListLoadedState&&const DeepCollectionEquality().equals(other._rooms, _rooms)&&const DeepCollectionEquality().equals(other._userCache, _userCache)&&(identical(other.currentUserId, currentUserId) || other.currentUserId == currentUserId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_rooms),const DeepCollectionEquality().hash(_userCache));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_rooms),const DeepCollectionEquality().hash(_userCache),currentUserId);
 
 @override
 String toString() {
-  return 'ChatListState.loaded(rooms: $rooms, userCache: $userCache)';
+  return 'ChatListState.loaded(rooms: $rooms, userCache: $userCache, currentUserId: $currentUserId)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $LoadedStateCopyWith<$Res> implements $ChatListStateCopyWith<$Res> {
-  factory $LoadedStateCopyWith(LoadedState value, $Res Function(LoadedState) _then) = _$LoadedStateCopyWithImpl;
+abstract mixin class $ChatListLoadedStateCopyWith<$Res> implements $ChatListStateCopyWith<$Res> {
+  factory $ChatListLoadedStateCopyWith(ChatListLoadedState value, $Res Function(ChatListLoadedState) _then) = _$ChatListLoadedStateCopyWithImpl;
 @useResult
 $Res call({
- List<Room> rooms, Map<String, User> userCache
+ List<Room> rooms, Map<String, User> userCache, String currentUserId
 });
 
 
@@ -314,20 +309,21 @@ $Res call({
 
 }
 /// @nodoc
-class _$LoadedStateCopyWithImpl<$Res>
-    implements $LoadedStateCopyWith<$Res> {
-  _$LoadedStateCopyWithImpl(this._self, this._then);
+class _$ChatListLoadedStateCopyWithImpl<$Res>
+    implements $ChatListLoadedStateCopyWith<$Res> {
+  _$ChatListLoadedStateCopyWithImpl(this._self, this._then);
 
-  final LoadedState _self;
-  final $Res Function(LoadedState) _then;
+  final ChatListLoadedState _self;
+  final $Res Function(ChatListLoadedState) _then;
 
 /// Create a copy of ChatListState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? rooms = null,Object? userCache = null,}) {
-  return _then(LoadedState(
-null == rooms ? _self._rooms : rooms // ignore: cast_nullable_to_non_nullable
-as List<Room>,null == userCache ? _self._userCache : userCache // ignore: cast_nullable_to_non_nullable
-as Map<String, User>,
+@pragma('vm:prefer-inline') $Res call({Object? rooms = null,Object? userCache = null,Object? currentUserId = null,}) {
+  return _then(ChatListLoadedState(
+rooms: null == rooms ? _self._rooms : rooms // ignore: cast_nullable_to_non_nullable
+as List<Room>,userCache: null == userCache ? _self._userCache : userCache // ignore: cast_nullable_to_non_nullable
+as Map<String, User>,currentUserId: null == currentUserId ? _self.currentUserId : currentUserId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 

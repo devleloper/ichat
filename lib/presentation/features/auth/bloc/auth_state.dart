@@ -4,10 +4,10 @@ import '../../../../domain/entities/user.dart';
 part 'auth_state.freezed.dart';
 
 @freezed
-class AuthState with _$AuthState {
-  const factory AuthState.initial() = InitialState;
-  const factory AuthState.loading() = LoadingState;
-  const factory AuthState.usersLoaded(List<User> users) = UsersLoadedState;
-  const factory AuthState.authenticated(User user) = AuthenticatedState;
-  const factory AuthState.error(String message) = ErrorState;
+sealed class AuthState with _$AuthState {
+  const factory AuthState.initial() = AuthInitialState;
+  const factory AuthState.loading() = AuthLoadingState;
+  const factory AuthState.usersLoaded(List<User> users) = AuthUsersLoadedState;
+  const factory AuthState.authenticated(User user) = AuthAuthenticatedState;
+  const factory AuthState.error(String message) = AuthErrorState;
 }

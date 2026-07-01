@@ -25,12 +25,9 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.backgroundLight,
+        color: AppTheme.backgroundPrimary,
         borderRadius: BorderRadius.circular(24.0),
-        border: Border.all(
-          color: const Color(0xFFC7C7CC),
-          width: 1.0,
-        ),
+        border: Border.all(color: AppTheme.inputBorder, width: 1.0),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,12 +42,9 @@ class CustomTextField extends StatelessWidget {
               minLines: 1,
               maxLines: 1,
               textInputAction: TextInputAction.send,
-              style: AppTheme.lightTheme.textTheme.bodyMedium,
               decoration: InputDecoration(
                 hintText: hintText,
-                hintStyle: AppTheme.lightTheme.textTheme.bodyMedium?.copyWith(
-                  color: const Color(0xFF8E8E93),
-                ),
+                hintStyle: const TextStyle(color: AppTheme.secondaryLabel),
                 contentPadding: const EdgeInsets.symmetric(
                   horizontal: 16.0,
                   vertical: 10.0,

@@ -17,7 +17,8 @@ abstract class RoomDto with _$RoomDto {
 
   const RoomDto._();
 
-  factory RoomDto.fromJson(Map<String, dynamic> json) => _$RoomDtoFromJson(json);
+  factory RoomDto.fromJson(Map<String, dynamic> json) =>
+      _$RoomDtoFromJson(json);
 
   Room toEntity() {
     return Room(
@@ -35,7 +36,9 @@ abstract class RoomDto with _$RoomDto {
       userAId: entity.userAId,
       userBId: entity.userBId,
       createdAt: entity.createdAt,
-      lastMessage: entity.lastMessage != null ? MessageDto.fromEntity(entity.lastMessage!) : null,
+      lastMessage: entity.lastMessage != null
+          ? MessageDto.fromEntity(entity.lastMessage!)
+          : null,
     );
   }
 }

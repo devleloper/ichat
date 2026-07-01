@@ -28,7 +28,7 @@ class UserTile extends StatelessWidget {
             child: Text(
               title.isNotEmpty ? title[0].toUpperCase() : '?',
               style: const TextStyle(
-                color: AppTheme.textDark,
+                color: AppTheme.textPrimary,
                 fontSize: 22,
                 fontWeight: FontWeight.w500,
               ),
@@ -45,7 +45,7 @@ class UserTile extends StatelessWidget {
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
-                    color: AppTheme.textDark,
+                    color: AppTheme.textPrimary,
                   ),
                 ),
                 if (subtitle != null) ...[
@@ -55,7 +55,7 @@ class UserTile extends StatelessWidget {
               ],
             ),
           ),
-          if (trailing != null) ...[const SizedBox(width: 16.0), trailing!],
+          if (trailing != null) ...[const SizedBox(width: 8.0), trailing!],
         ],
       ),
     );

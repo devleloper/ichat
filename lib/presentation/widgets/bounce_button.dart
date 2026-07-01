@@ -28,17 +28,11 @@ class _BounceButtonState extends State<BounceButton>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.duration,
-    );
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: widget.scaleFactor,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOutCubic,
-    ));
+    _controller = AnimationController(vsync: this, duration: widget.duration);
+    _scaleAnimation = Tween<double>(begin: 1.0, end: widget.scaleFactor)
+        .animate(
+          CurvedAnimation(parent: _controller, curve: Curves.easeInOutCubic),
+        );
   }
 
   @override
@@ -67,10 +61,7 @@ class _BounceButtonState extends State<BounceButton>
       onTapDown: _onTapDown,
       onTapUp: _onTapUp,
       onTapCancel: _onTapCancel,
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: widget.child,
-      ),
+      child: ScaleTransition(scale: _scaleAnimation, child: widget.child),
     );
   }
 }

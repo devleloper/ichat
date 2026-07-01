@@ -5,12 +5,13 @@ import '../../../../domain/entities/user.dart';
 part 'chat_list_state.freezed.dart';
 
 @freezed
-class ChatListState with _$ChatListState {
+sealed class ChatListState with _$ChatListState {
   const factory ChatListState.initial() = ChatListInitialState;
   const factory ChatListState.loading() = ChatListLoadingState;
-  const factory ChatListState.loaded(
-    List<Room> rooms,
-    Map<String, User> userCache,
-  ) = LoadedState;
+  const factory ChatListState.loaded({
+    required List<Room> rooms,
+    required Map<String, User> userCache,
+    required String currentUserId,
+  }) = ChatListLoadedState;
   const factory ChatListState.error(String message) = ChatListErrorState;
 }

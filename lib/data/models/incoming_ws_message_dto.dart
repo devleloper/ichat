@@ -11,5 +11,6 @@ abstract class IncomingWsMessageDto with _$IncomingWsMessageDto {
     @JsonKey(name: 'client_message_id') String? clientMessageId,
   }) = _IncomingWsMessageDto;
 
-  factory IncomingWsMessageDto.fromJson(Map<String, dynamic> json) => _$IncomingWsMessageDtoFromJson(json);
+  factory IncomingWsMessageDto.fromJson(Map<String, dynamic> json) =>
+      _$IncomingWsMessageDtoFromJson(json);
 }

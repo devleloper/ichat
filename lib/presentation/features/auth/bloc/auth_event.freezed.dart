@@ -56,13 +56,14 @@ extension AuthEventPatterns on AuthEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadUsersEvent value)?  loadUsers,TResult Function( CreateUserEvent value)?  createUser,TResult Function( SelectUserEvent value)?  selectUser,TResult Function( LogoutEvent value)?  logout,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AuthCheckSessionEvent value)?  checkSession,TResult Function( AuthLoadUsersEvent value)?  loadUsers,TResult Function( AuthCreateUserEvent value)?  createUser,TResult Function( AuthSelectUserEvent value)?  selectUser,TResult Function( AuthLogoutEvent value)?  logout,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case LoadUsersEvent() when loadUsers != null:
-return loadUsers(_that);case CreateUserEvent() when createUser != null:
-return createUser(_that);case SelectUserEvent() when selectUser != null:
-return selectUser(_that);case LogoutEvent() when logout != null:
+case AuthCheckSessionEvent() when checkSession != null:
+return checkSession(_that);case AuthLoadUsersEvent() when loadUsers != null:
+return loadUsers(_that);case AuthCreateUserEvent() when createUser != null:
+return createUser(_that);case AuthSelectUserEvent() when selectUser != null:
+return selectUser(_that);case AuthLogoutEvent() when logout != null:
 return logout(_that);case _:
   return orElse();
 
@@ -81,17 +82,15 @@ return logout(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadUsersEvent value)  loadUsers,required TResult Function( CreateUserEvent value)  createUser,required TResult Function( SelectUserEvent value)  selectUser,required TResult Function( LogoutEvent value)  logout,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AuthCheckSessionEvent value)  checkSession,required TResult Function( AuthLoadUsersEvent value)  loadUsers,required TResult Function( AuthCreateUserEvent value)  createUser,required TResult Function( AuthSelectUserEvent value)  selectUser,required TResult Function( AuthLogoutEvent value)  logout,}){
 final _that = this;
 switch (_that) {
-case LoadUsersEvent():
-return loadUsers(_that);case CreateUserEvent():
-return createUser(_that);case SelectUserEvent():
-return selectUser(_that);case LogoutEvent():
-return logout(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case AuthCheckSessionEvent():
+return checkSession(_that);case AuthLoadUsersEvent():
+return loadUsers(_that);case AuthCreateUserEvent():
+return createUser(_that);case AuthSelectUserEvent():
+return selectUser(_that);case AuthLogoutEvent():
+return logout(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -105,13 +104,14 @@ return logout(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadUsersEvent value)?  loadUsers,TResult? Function( CreateUserEvent value)?  createUser,TResult? Function( SelectUserEvent value)?  selectUser,TResult? Function( LogoutEvent value)?  logout,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AuthCheckSessionEvent value)?  checkSession,TResult? Function( AuthLoadUsersEvent value)?  loadUsers,TResult? Function( AuthCreateUserEvent value)?  createUser,TResult? Function( AuthSelectUserEvent value)?  selectUser,TResult? Function( AuthLogoutEvent value)?  logout,}){
 final _that = this;
 switch (_that) {
-case LoadUsersEvent() when loadUsers != null:
-return loadUsers(_that);case CreateUserEvent() when createUser != null:
-return createUser(_that);case SelectUserEvent() when selectUser != null:
-return selectUser(_that);case LogoutEvent() when logout != null:
+case AuthCheckSessionEvent() when checkSession != null:
+return checkSession(_that);case AuthLoadUsersEvent() when loadUsers != null:
+return loadUsers(_that);case AuthCreateUserEvent() when createUser != null:
+return createUser(_that);case AuthSelectUserEvent() when selectUser != null:
+return selectUser(_that);case AuthLogoutEvent() when logout != null:
 return logout(_that);case _:
   return null;
 
@@ -129,12 +129,13 @@ return logout(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadUsers,TResult Function( String name)?  createUser,TResult Function( User user)?  selectUser,TResult Function()?  logout,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  checkSession,TResult Function()?  loadUsers,TResult Function( String name)?  createUser,TResult Function( User user)?  selectUser,TResult Function()?  logout,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case LoadUsersEvent() when loadUsers != null:
-return loadUsers();case CreateUserEvent() when createUser != null:
-return createUser(_that.name);case SelectUserEvent() when selectUser != null:
-return selectUser(_that.user);case LogoutEvent() when logout != null:
+case AuthCheckSessionEvent() when checkSession != null:
+return checkSession();case AuthLoadUsersEvent() when loadUsers != null:
+return loadUsers();case AuthCreateUserEvent() when createUser != null:
+return createUser(_that.name);case AuthSelectUserEvent() when selectUser != null:
+return selectUser(_that.user);case AuthLogoutEvent() when logout != null:
 return logout();case _:
   return orElse();
 
@@ -153,16 +154,14 @@ return logout();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadUsers,required TResult Function( String name)  createUser,required TResult Function( User user)  selectUser,required TResult Function()  logout,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  checkSession,required TResult Function()  loadUsers,required TResult Function( String name)  createUser,required TResult Function( User user)  selectUser,required TResult Function()  logout,}) {final _that = this;
 switch (_that) {
-case LoadUsersEvent():
-return loadUsers();case CreateUserEvent():
-return createUser(_that.name);case SelectUserEvent():
-return selectUser(_that.user);case LogoutEvent():
-return logout();case _:
-  throw StateError('Unexpected subclass');
-
-}
+case AuthCheckSessionEvent():
+return checkSession();case AuthLoadUsersEvent():
+return loadUsers();case AuthCreateUserEvent():
+return createUser(_that.name);case AuthSelectUserEvent():
+return selectUser(_that.user);case AuthLogoutEvent():
+return logout();}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -176,12 +175,13 @@ return logout();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadUsers,TResult? Function( String name)?  createUser,TResult? Function( User user)?  selectUser,TResult? Function()?  logout,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  checkSession,TResult? Function()?  loadUsers,TResult? Function( String name)?  createUser,TResult? Function( User user)?  selectUser,TResult? Function()?  logout,}) {final _that = this;
 switch (_that) {
-case LoadUsersEvent() when loadUsers != null:
-return loadUsers();case CreateUserEvent() when createUser != null:
-return createUser(_that.name);case SelectUserEvent() when selectUser != null:
-return selectUser(_that.user);case LogoutEvent() when logout != null:
+case AuthCheckSessionEvent() when checkSession != null:
+return checkSession();case AuthLoadUsersEvent() when loadUsers != null:
+return loadUsers();case AuthCreateUserEvent() when createUser != null:
+return createUser(_that.name);case AuthSelectUserEvent() when selectUser != null:
+return selectUser(_that.user);case AuthLogoutEvent() when logout != null:
 return logout();case _:
   return null;
 
@@ -193,8 +193,8 @@ return logout();case _:
 /// @nodoc
 
 
-class LoadUsersEvent implements AuthEvent {
-  const LoadUsersEvent();
+class AuthCheckSessionEvent implements AuthEvent {
+  const AuthCheckSessionEvent();
   
 
 
@@ -204,7 +204,39 @@ class LoadUsersEvent implements AuthEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadUsersEvent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthCheckSessionEvent);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AuthEvent.checkSession()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class AuthLoadUsersEvent implements AuthEvent {
+  const AuthLoadUsersEvent();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthLoadUsersEvent);
 }
 
 
@@ -225,8 +257,8 @@ String toString() {
 /// @nodoc
 
 
-class CreateUserEvent implements AuthEvent {
-  const CreateUserEvent(this.name);
+class AuthCreateUserEvent implements AuthEvent {
+  const AuthCreateUserEvent(this.name);
   
 
  final  String name;
@@ -235,13 +267,13 @@ class CreateUserEvent implements AuthEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$CreateUserEventCopyWith<CreateUserEvent> get copyWith => _$CreateUserEventCopyWithImpl<CreateUserEvent>(this, _$identity);
+$AuthCreateUserEventCopyWith<AuthCreateUserEvent> get copyWith => _$AuthCreateUserEventCopyWithImpl<AuthCreateUserEvent>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateUserEvent&&(identical(other.name, name) || other.name == name));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthCreateUserEvent&&(identical(other.name, name) || other.name == name));
 }
 
 
@@ -257,8 +289,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $CreateUserEventCopyWith<$Res> implements $AuthEventCopyWith<$Res> {
-  factory $CreateUserEventCopyWith(CreateUserEvent value, $Res Function(CreateUserEvent) _then) = _$CreateUserEventCopyWithImpl;
+abstract mixin class $AuthCreateUserEventCopyWith<$Res> implements $AuthEventCopyWith<$Res> {
+  factory $AuthCreateUserEventCopyWith(AuthCreateUserEvent value, $Res Function(AuthCreateUserEvent) _then) = _$AuthCreateUserEventCopyWithImpl;
 @useResult
 $Res call({
  String name
@@ -269,17 +301,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$CreateUserEventCopyWithImpl<$Res>
-    implements $CreateUserEventCopyWith<$Res> {
-  _$CreateUserEventCopyWithImpl(this._self, this._then);
+class _$AuthCreateUserEventCopyWithImpl<$Res>
+    implements $AuthCreateUserEventCopyWith<$Res> {
+  _$AuthCreateUserEventCopyWithImpl(this._self, this._then);
 
-  final CreateUserEvent _self;
-  final $Res Function(CreateUserEvent) _then;
+  final AuthCreateUserEvent _self;
+  final $Res Function(AuthCreateUserEvent) _then;
 
 /// Create a copy of AuthEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? name = null,}) {
-  return _then(CreateUserEvent(
+  return _then(AuthCreateUserEvent(
 null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -291,8 +323,8 @@ as String,
 /// @nodoc
 
 
-class SelectUserEvent implements AuthEvent {
-  const SelectUserEvent(this.user);
+class AuthSelectUserEvent implements AuthEvent {
+  const AuthSelectUserEvent(this.user);
   
 
  final  User user;
@@ -301,13 +333,13 @@ class SelectUserEvent implements AuthEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$SelectUserEventCopyWith<SelectUserEvent> get copyWith => _$SelectUserEventCopyWithImpl<SelectUserEvent>(this, _$identity);
+$AuthSelectUserEventCopyWith<AuthSelectUserEvent> get copyWith => _$AuthSelectUserEventCopyWithImpl<AuthSelectUserEvent>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is SelectUserEvent&&(identical(other.user, user) || other.user == user));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthSelectUserEvent&&(identical(other.user, user) || other.user == user));
 }
 
 
@@ -323,42 +355,51 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $SelectUserEventCopyWith<$Res> implements $AuthEventCopyWith<$Res> {
-  factory $SelectUserEventCopyWith(SelectUserEvent value, $Res Function(SelectUserEvent) _then) = _$SelectUserEventCopyWithImpl;
+abstract mixin class $AuthSelectUserEventCopyWith<$Res> implements $AuthEventCopyWith<$Res> {
+  factory $AuthSelectUserEventCopyWith(AuthSelectUserEvent value, $Res Function(AuthSelectUserEvent) _then) = _$AuthSelectUserEventCopyWithImpl;
 @useResult
 $Res call({
  User user
 });
 
 
-
+$UserCopyWith<$Res> get user;
 
 }
 /// @nodoc
-class _$SelectUserEventCopyWithImpl<$Res>
-    implements $SelectUserEventCopyWith<$Res> {
-  _$SelectUserEventCopyWithImpl(this._self, this._then);
+class _$AuthSelectUserEventCopyWithImpl<$Res>
+    implements $AuthSelectUserEventCopyWith<$Res> {
+  _$AuthSelectUserEventCopyWithImpl(this._self, this._then);
 
-  final SelectUserEvent _self;
-  final $Res Function(SelectUserEvent) _then;
+  final AuthSelectUserEvent _self;
+  final $Res Function(AuthSelectUserEvent) _then;
 
 /// Create a copy of AuthEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
-  return _then(SelectUserEvent(
+  return _then(AuthSelectUserEvent(
 null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
 as User,
   ));
 }
 
-
+/// Create a copy of AuthEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$UserCopyWith<$Res> get user {
+  
+  return $UserCopyWith<$Res>(_self.user, (value) {
+    return _then(_self.copyWith(user: value));
+  });
+}
 }
 
 /// @nodoc
 
 
-class LogoutEvent implements AuthEvent {
-  const LogoutEvent();
+class AuthLogoutEvent implements AuthEvent {
+  const AuthLogoutEvent();
   
 
 
@@ -368,7 +409,7 @@ class LogoutEvent implements AuthEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LogoutEvent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AuthLogoutEvent);
 }
 
 

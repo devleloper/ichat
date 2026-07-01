@@ -1,15 +1,17 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../theme/app_theme.dart';
 import '../../../widgets/bounce_button.dart';
-import '../../../widgets/user_tile.dart';
 import '../bloc/chat_list_bloc.dart';
 import '../bloc/chat_list_event.dart';
 import '../bloc/chat_list_state.dart';
+import '../widgets/new_message_sheet.dart';
+import '../widgets/room_list_tile.dart';
 import '../../auth/bloc/auth_bloc.dart';
-import '../../../../domain/entities/user.dart';
+import '../../auth/bloc/auth_event.dart';
 import '../../auth/bloc/auth_state.dart';
 
 class ChatListScreen extends StatefulWidget {
@@ -20,224 +22,192 @@ class ChatListScreen extends StatefulWidget {
 }
 
 class _ChatListScreenState extends State<ChatListScreen> {
-
   @override
   void initState() {
     super.initState();
     context.read<ChatListBloc>().add(const ChatListEvent.loadRooms());
   }
-  void _showNewMessageSheet(BuildContext context, Map<String, User> userCache) {
-    final authState = context.read<AuthBloc>().state;
-    final currentUserId = switch (authState) {
-      AuthenticatedState s => s.user.id,
-      _ => null,
-    };
 
-    showModalBottomSheet(
+  void _showNewMessageSheet(
+    BuildContext context,
+    ChatListLoadedState loadedState,
+  ) {
+    final otherUsers = loadedState.userCache.values
+        .where((u) => u.id != loadedState.currentUserId)
+        .toList();
+
+    showModalBottomSheet<void>(
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (sheetContext) {
-        return SafeArea(
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Text(
-                  'Новое сообщение',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                ),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: userCache.length,
-                  itemBuilder: (context, index) {
-                    final user = userCache.values.elementAt(index);
-                    if (user.id == currentUserId) {
-                      return const SizedBox.shrink();
-                    }
-
-                    return UserTile(
-                      title: user.name,
-                      onTap: () {
-                        Navigator.pop(sheetContext);
-                        context.read<ChatListBloc>().add(
-                          ChatListEvent.createRoom(user.id),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+      builder: (_) => NewMessageSheet(otherUsers: otherUsers),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              floating: true,
-              pinned: true,
-              expandedHeight: 70.0,
-              backgroundColor: AppTheme.backgroundLight,
-              flexibleSpace: FlexibleSpaceBar(
-                titlePadding: const EdgeInsets.only(left: 16, bottom: 12),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const Text(
-                      'Сообщения',
-                      style: TextStyle(
-                        color: AppTheme.textDark,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    BounceButton(
-                      onPressed: () {
-                        final state = context.read<ChatListBloc>().state;
-                        if (state is LoadedState) {
-                          _showNewMessageSheet(context, state.userCache);
-                        }
-                      },
-                      child: const Padding(
-                        padding: EdgeInsets.only(right: 16.0),
-                        child: Icon(
-                          CupertinoIcons.square_pencil,
-                          color: AppTheme.iMessageBlue,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            BlocBuilder<ChatListBloc, ChatListState>(
-              builder: (context, state) {
-                if (state is ChatListLoadingState) {
-                  return const SliverFillRemaining(
-                    child: Center(child: CupertinoActivityIndicator()),
-                  );
-                } else if (state is ChatListErrorState) {
-                  return SliverFillRemaining(
-                    child: Center(
-                      child: Text(
-                        state.message,
-                        style: const TextStyle(
-                          color: CupertinoColors.destructiveRed,
-                        ),
-                      ),
-                    ),
-                  );
-                } else if (state is LoadedState) {
-                  if (state.rooms.isEmpty) {
-                    return const SliverFillRemaining(
-                      child: Center(
-                        child: Text(
-                          'No messages yet',
-                          style: TextStyle(color: Color(0xFF8E8E93)),
-                        ),
-                      ),
-                    );
-                  }
-
-                  final authState = context.read<AuthBloc>().state;
-                  final currentUserId = switch (authState) {
-                    AuthenticatedState a => a.user.id,
-                    _ => null,
-                  };
-
-                  return SliverList(
-                    delegate: SliverChildBuilderDelegate((context, index) {
-                      final room = state.rooms[index];
-                      final otherUserId = room.userAId == currentUserId
-                          ? room.userBId
-                          : room.userAId;
-                      final otherUser = state.userCache[otherUserId];
-                      final otherUserName = otherUser?.name ?? 'Unknown';
-
-                      return Column(
-                        children: [
-                          UserTile(
-                            onTap: () {
-                              context.push('/chats/${room.id}', extra: otherUserName);
-                            },
-                            title: otherUserName,
-                                subtitle: Padding(
-                                  padding: const EdgeInsets.only(top: 4.0),
-                                  child: Text(
-                                    room.lastMessage != null
-                                        ? '${room.lastMessage!.senderId == currentUserId ? "Вы: " : ""}${room.lastMessage!.text}'
-                                        : 'Новый чат',
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      color: Color(0xFF8E8E93),
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    if (room.lastMessage != null)
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 4.0),
-                                        child: Text(
-                                          _formatTime(room.lastMessage!.createdAt),
-                                          style: const TextStyle(
-                                            color: Color(0xFF8E8E93),
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    const Icon(
-                                      CupertinoIcons.chevron_right,
-                                      color: Color(0xFFC7C7CC),
-                                      size: 20,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            const Padding(
-                              padding: EdgeInsets.only(left: 84.0),
-                              child: Divider(
-                                height: 1,
-                                color: Color(0xFFE5E5EA),
-                              ),
-                            ),
-                          ],
-                        );
-                      }, childCount: state.rooms.length),
-                  );
-                }
-
-                return const SliverFillRemaining(child: SizedBox.shrink());
-              },
-            ),
-          ],
+  void _showProfileSheet(BuildContext context, String userName) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoActionSheet(
+        title: Text('Аккаунт: $userName'),
+        actions: <CupertinoActionSheetAction>[
+          CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () {
+              Navigator.pop(context);
+              context.read<AuthBloc>().add(const AuthEvent.logout());
+            },
+            child: const Text('Выйти'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('Отмена'),
         ),
       ),
     );
   }
 
-  String _formatTime(DateTime date) {
-    final now = DateTime.now();
-    if (date.year == now.year &&
-        date.month == now.month &&
-        date.day == now.day) {
-      return '${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is AuthInitialState) {
+          context.go('/');
+        }
+      },
+      child: Scaffold(
+        body: SafeArea(
+          child: CustomScrollView(
+            slivers: [
+              BlocBuilder<ChatListBloc, ChatListState>(
+                builder: (context, state) {
+                  String userName = '';
+                  if (state is ChatListLoadedState) {
+                    userName = state.userCache[state.currentUserId]?.name ?? '';
+                  }
+
+                  return SliverAppBar(
+                    floating: true,
+                    pinned: true,
+                    expandedHeight: 70.0,
+                    backgroundColor: context.bgPrimary,
+                    flexibleSpace: FlexibleSpaceBar(
+                      titlePadding: const EdgeInsets.only(left: 16, bottom: 12),
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                AppStrings.messages,
+                                style: TextStyle(
+                                  color: context.textMain,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              BounceButton(
+                                onPressed: () {
+                                  _showProfileSheet(context, userName);
+                                },
+                                child: const Padding(
+                                  padding: EdgeInsets.only(top: 2.0),
+                                  child: Icon(
+                                    CupertinoIcons.person_crop_circle,
+                                    color: AppTheme.iMessageBlue,
+                                    size: 22,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          BounceButton(
+                            onPressed: () {
+                              if (state is ChatListLoadedState) {
+                                _showNewMessageSheet(context, state);
+                              }
+                            },
+                            child: const Padding(
+                              padding: EdgeInsets.only(right: 16.0, top: 2.0),
+                              child: Icon(
+                                CupertinoIcons.square_pencil,
+                                color: AppTheme.iMessageBlue,
+                                size: 22,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+              BlocBuilder<ChatListBloc, ChatListState>(
+                builder: (context, state) => switch (state) {
+                  ChatListLoadingState() => const SliverFillRemaining(
+                    child: Center(child: CupertinoActivityIndicator()),
+                  ),
+                  ChatListErrorState(message: final msg) => SliverFillRemaining(
+                    child: Center(
+                      child: Text(
+                        msg,
+                        style: const TextStyle(color: AppTheme.destructiveRed),
+                      ),
+                    ),
+                  ),
+                  ChatListLoadedState() => _RoomList(state: state),
+                  _ => const SliverFillRemaining(child: SizedBox.shrink()),
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RoomList extends StatelessWidget {
+  final ChatListLoadedState state;
+
+  const _RoomList({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    if (state.rooms.isEmpty) {
+      return SliverFillRemaining(
+        child: Center(
+          child: Text(
+            AppStrings.noMessagesYet,
+            style: TextStyle(color: context.textSecondary),
+          ),
+        ),
+      );
     }
-    return '${date.month}/${date.day}/${date.year.toString().substring(2)}';
+
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => RoomListTile(
+          room: state.rooms[index],
+          currentUserId: state.currentUserId,
+          userCache: state.userCache,
+          onTap: () {
+            final room = state.rooms[index];
+            final otherUserId = room.userAId == state.currentUserId
+                ? room.userBId
+                : room.userAId;
+            context.push('/chats/${room.id}?userId=$otherUserId');
+          },
+        ),
+        childCount: state.rooms.length,
+      ),
+    );
   }
 }

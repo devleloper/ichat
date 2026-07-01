@@ -56,12 +56,12 @@ extension ChatListEventPatterns on ChatListEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( LoadRoomsEvent value)?  loadRooms,TResult Function( CreateRoomEvent value)?  createRoom,TResult Function( MessageReceivedEvent value)?  messageReceived,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ChatListLoadRoomsEvent value)?  loadRooms,TResult Function( ChatListCreateRoomEvent value)?  createRoom,TResult Function( ChatListMessageReceivedEvent value)?  messageReceived,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case LoadRoomsEvent() when loadRooms != null:
-return loadRooms(_that);case CreateRoomEvent() when createRoom != null:
-return createRoom(_that);case MessageReceivedEvent() when messageReceived != null:
+case ChatListLoadRoomsEvent() when loadRooms != null:
+return loadRooms(_that);case ChatListCreateRoomEvent() when createRoom != null:
+return createRoom(_that);case ChatListMessageReceivedEvent() when messageReceived != null:
 return messageReceived(_that);case _:
   return orElse();
 
@@ -80,16 +80,13 @@ return messageReceived(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( LoadRoomsEvent value)  loadRooms,required TResult Function( CreateRoomEvent value)  createRoom,required TResult Function( MessageReceivedEvent value)  messageReceived,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ChatListLoadRoomsEvent value)  loadRooms,required TResult Function( ChatListCreateRoomEvent value)  createRoom,required TResult Function( ChatListMessageReceivedEvent value)  messageReceived,}){
 final _that = this;
 switch (_that) {
-case LoadRoomsEvent():
-return loadRooms(_that);case CreateRoomEvent():
-return createRoom(_that);case MessageReceivedEvent():
-return messageReceived(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case ChatListLoadRoomsEvent():
+return loadRooms(_that);case ChatListCreateRoomEvent():
+return createRoom(_that);case ChatListMessageReceivedEvent():
+return messageReceived(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -103,12 +100,12 @@ return messageReceived(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( LoadRoomsEvent value)?  loadRooms,TResult? Function( CreateRoomEvent value)?  createRoom,TResult? Function( MessageReceivedEvent value)?  messageReceived,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ChatListLoadRoomsEvent value)?  loadRooms,TResult? Function( ChatListCreateRoomEvent value)?  createRoom,TResult? Function( ChatListMessageReceivedEvent value)?  messageReceived,}){
 final _that = this;
 switch (_that) {
-case LoadRoomsEvent() when loadRooms != null:
-return loadRooms(_that);case CreateRoomEvent() when createRoom != null:
-return createRoom(_that);case MessageReceivedEvent() when messageReceived != null:
+case ChatListLoadRoomsEvent() when loadRooms != null:
+return loadRooms(_that);case ChatListCreateRoomEvent() when createRoom != null:
+return createRoom(_that);case ChatListMessageReceivedEvent() when messageReceived != null:
 return messageReceived(_that);case _:
   return null;
 
@@ -128,9 +125,9 @@ return messageReceived(_that);case _:
 
 @optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadRooms,TResult Function( String targetUserId)?  createRoom,TResult Function( Message message)?  messageReceived,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case LoadRoomsEvent() when loadRooms != null:
-return loadRooms();case CreateRoomEvent() when createRoom != null:
-return createRoom(_that.targetUserId);case MessageReceivedEvent() when messageReceived != null:
+case ChatListLoadRoomsEvent() when loadRooms != null:
+return loadRooms();case ChatListCreateRoomEvent() when createRoom != null:
+return createRoom(_that.targetUserId);case ChatListMessageReceivedEvent() when messageReceived != null:
 return messageReceived(_that.message);case _:
   return orElse();
 
@@ -151,13 +148,10 @@ return messageReceived(_that.message);case _:
 
 @optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadRooms,required TResult Function( String targetUserId)  createRoom,required TResult Function( Message message)  messageReceived,}) {final _that = this;
 switch (_that) {
-case LoadRoomsEvent():
-return loadRooms();case CreateRoomEvent():
-return createRoom(_that.targetUserId);case MessageReceivedEvent():
-return messageReceived(_that.message);case _:
-  throw StateError('Unexpected subclass');
-
-}
+case ChatListLoadRoomsEvent():
+return loadRooms();case ChatListCreateRoomEvent():
+return createRoom(_that.targetUserId);case ChatListMessageReceivedEvent():
+return messageReceived(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
@@ -173,9 +167,9 @@ return messageReceived(_that.message);case _:
 
 @optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadRooms,TResult? Function( String targetUserId)?  createRoom,TResult? Function( Message message)?  messageReceived,}) {final _that = this;
 switch (_that) {
-case LoadRoomsEvent() when loadRooms != null:
-return loadRooms();case CreateRoomEvent() when createRoom != null:
-return createRoom(_that.targetUserId);case MessageReceivedEvent() when messageReceived != null:
+case ChatListLoadRoomsEvent() when loadRooms != null:
+return loadRooms();case ChatListCreateRoomEvent() when createRoom != null:
+return createRoom(_that.targetUserId);case ChatListMessageReceivedEvent() when messageReceived != null:
 return messageReceived(_that.message);case _:
   return null;
 
@@ -187,8 +181,8 @@ return messageReceived(_that.message);case _:
 /// @nodoc
 
 
-class LoadRoomsEvent implements ChatListEvent {
-  const LoadRoomsEvent();
+class ChatListLoadRoomsEvent implements ChatListEvent {
+  const ChatListLoadRoomsEvent();
   
 
 
@@ -198,7 +192,7 @@ class LoadRoomsEvent implements ChatListEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoadRoomsEvent);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatListLoadRoomsEvent);
 }
 
 
@@ -219,8 +213,8 @@ String toString() {
 /// @nodoc
 
 
-class CreateRoomEvent implements ChatListEvent {
-  const CreateRoomEvent(this.targetUserId);
+class ChatListCreateRoomEvent implements ChatListEvent {
+  const ChatListCreateRoomEvent(this.targetUserId);
   
 
  final  String targetUserId;
@@ -229,13 +223,13 @@ class CreateRoomEvent implements ChatListEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$CreateRoomEventCopyWith<CreateRoomEvent> get copyWith => _$CreateRoomEventCopyWithImpl<CreateRoomEvent>(this, _$identity);
+$ChatListCreateRoomEventCopyWith<ChatListCreateRoomEvent> get copyWith => _$ChatListCreateRoomEventCopyWithImpl<ChatListCreateRoomEvent>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is CreateRoomEvent&&(identical(other.targetUserId, targetUserId) || other.targetUserId == targetUserId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatListCreateRoomEvent&&(identical(other.targetUserId, targetUserId) || other.targetUserId == targetUserId));
 }
 
 
@@ -251,8 +245,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $CreateRoomEventCopyWith<$Res> implements $ChatListEventCopyWith<$Res> {
-  factory $CreateRoomEventCopyWith(CreateRoomEvent value, $Res Function(CreateRoomEvent) _then) = _$CreateRoomEventCopyWithImpl;
+abstract mixin class $ChatListCreateRoomEventCopyWith<$Res> implements $ChatListEventCopyWith<$Res> {
+  factory $ChatListCreateRoomEventCopyWith(ChatListCreateRoomEvent value, $Res Function(ChatListCreateRoomEvent) _then) = _$ChatListCreateRoomEventCopyWithImpl;
 @useResult
 $Res call({
  String targetUserId
@@ -263,17 +257,17 @@ $Res call({
 
 }
 /// @nodoc
-class _$CreateRoomEventCopyWithImpl<$Res>
-    implements $CreateRoomEventCopyWith<$Res> {
-  _$CreateRoomEventCopyWithImpl(this._self, this._then);
+class _$ChatListCreateRoomEventCopyWithImpl<$Res>
+    implements $ChatListCreateRoomEventCopyWith<$Res> {
+  _$ChatListCreateRoomEventCopyWithImpl(this._self, this._then);
 
-  final CreateRoomEvent _self;
-  final $Res Function(CreateRoomEvent) _then;
+  final ChatListCreateRoomEvent _self;
+  final $Res Function(ChatListCreateRoomEvent) _then;
 
 /// Create a copy of ChatListEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? targetUserId = null,}) {
-  return _then(CreateRoomEvent(
+  return _then(ChatListCreateRoomEvent(
 null == targetUserId ? _self.targetUserId : targetUserId // ignore: cast_nullable_to_non_nullable
 as String,
   ));
@@ -285,8 +279,8 @@ as String,
 /// @nodoc
 
 
-class MessageReceivedEvent implements ChatListEvent {
-  const MessageReceivedEvent(this.message);
+class ChatListMessageReceivedEvent implements ChatListEvent {
+  const ChatListMessageReceivedEvent(this.message);
   
 
  final  Message message;
@@ -295,13 +289,13 @@ class MessageReceivedEvent implements ChatListEvent {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$MessageReceivedEventCopyWith<MessageReceivedEvent> get copyWith => _$MessageReceivedEventCopyWithImpl<MessageReceivedEvent>(this, _$identity);
+$ChatListMessageReceivedEventCopyWith<ChatListMessageReceivedEvent> get copyWith => _$ChatListMessageReceivedEventCopyWithImpl<ChatListMessageReceivedEvent>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is MessageReceivedEvent&&(identical(other.message, message) || other.message == message));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatListMessageReceivedEvent&&(identical(other.message, message) || other.message == message));
 }
 
 
@@ -317,35 +311,44 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class $MessageReceivedEventCopyWith<$Res> implements $ChatListEventCopyWith<$Res> {
-  factory $MessageReceivedEventCopyWith(MessageReceivedEvent value, $Res Function(MessageReceivedEvent) _then) = _$MessageReceivedEventCopyWithImpl;
+abstract mixin class $ChatListMessageReceivedEventCopyWith<$Res> implements $ChatListEventCopyWith<$Res> {
+  factory $ChatListMessageReceivedEventCopyWith(ChatListMessageReceivedEvent value, $Res Function(ChatListMessageReceivedEvent) _then) = _$ChatListMessageReceivedEventCopyWithImpl;
 @useResult
 $Res call({
  Message message
 });
 
 
-
+$MessageCopyWith<$Res> get message;
 
 }
 /// @nodoc
-class _$MessageReceivedEventCopyWithImpl<$Res>
-    implements $MessageReceivedEventCopyWith<$Res> {
-  _$MessageReceivedEventCopyWithImpl(this._self, this._then);
+class _$ChatListMessageReceivedEventCopyWithImpl<$Res>
+    implements $ChatListMessageReceivedEventCopyWith<$Res> {
+  _$ChatListMessageReceivedEventCopyWithImpl(this._self, this._then);
 
-  final MessageReceivedEvent _self;
-  final $Res Function(MessageReceivedEvent) _then;
+  final ChatListMessageReceivedEvent _self;
+  final $Res Function(ChatListMessageReceivedEvent) _then;
 
 /// Create a copy of ChatListEvent
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
-  return _then(MessageReceivedEvent(
+  return _then(ChatListMessageReceivedEvent(
 null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as Message,
   ));
 }
 
-
+/// Create a copy of ChatListEvent
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$MessageCopyWith<$Res> get message {
+  
+  return $MessageCopyWith<$Res>(_self.message, (value) {
+    return _then(_self.copyWith(message: value));
+  });
+}
 }
 
 // dart format on

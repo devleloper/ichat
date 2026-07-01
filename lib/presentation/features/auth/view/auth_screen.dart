@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../../../theme/app_theme.dart';
 import '../../../widgets/bounce_button.dart';
 import '../../../widgets/custom_text_field.dart';
-import '../../../widgets/user_tile.dart';
+import '../widgets/auth_user_list.dart';
 import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_state.dart';
@@ -33,22 +34,33 @@ class _AuthScreenState extends State<AuthScreen> {
 
   void _onCreateUser() {
     final name = _nameController.text.trim();
-    if (name.isNotEmpty) {
-      context.read<AuthBloc>().add(AuthEvent.createUser(name));
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(AppStrings.pleaseEnterName),
+          backgroundColor: AppTheme.destructiveRed,
+        ),
+      );
+      return;
     }
+    context.read<AuthBloc>().add(AuthEvent.createUser(name));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.bgPrimary,
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
-          if (state is AuthenticatedState) {
+          if (state is AuthAuthenticatedState) {
             context.go('/chats');
-          } else if (state is ErrorState) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message)));
+          } else if (state is AuthErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: AppTheme.destructiveRed,
+              ),
+            );
           }
         },
         builder: (context, state) {
@@ -56,11 +68,12 @@ class _AuthScreenState extends State<AuthScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
                   child: Text(
-                    'Создать пользователя',
+                    AppStrings.createProfile,
                     style: TextStyle(
+                      color: context.textMain,
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
@@ -72,7 +85,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: CustomTextField(
                     controller: _nameController,
-                    hintText: 'Введите ваше имя...',
+                    hintText: AppStrings.enterYourName,
                     onSubmitted: _onCreateUser,
                     suffixIcon: BounceButton(
                       onPressed: _onCreateUser,
@@ -93,11 +106,12 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Text(
-                    'Выбрать',
+                    AppStrings.signInAs,
                     style: TextStyle(
+                      color: context.textMain,
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                       letterSpacing: -0.5,
@@ -105,46 +119,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Expanded(
-                  child: switch (state) {
-                    LoadingState() => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                    UsersLoadedState(users: final users) =>
-                      users.isEmpty
-                          ? const Center(
-                              child: Text(
-                                'Пользователи не найдены. Создайте выше!',
-                              ),
-                            )
-                          : ListView.builder(
-                              itemCount: users.length,
-                              itemBuilder: (context, index) {
-                                final user = users[index];
-                                return Column(
-                                  children: [
-                                    UserTile(
-                                      title: user.name,
-                                      onTap: () {
-                                        context.read<AuthBloc>().add(
-                                          AuthEvent.selectUser(user),
-                                        );
-                                      },
-                                    ),
-                                    const Padding(
-                                      padding: EdgeInsets.only(left: 84.0),
-                                      child: Divider(
-                                        height: 1,
-                                        color: Color(0xFFE5E5EA),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
-                    _ => const SizedBox.shrink(),
-                  },
-                ),
+                Expanded(child: AuthUserList(state: state)),
               ],
             ),
           );

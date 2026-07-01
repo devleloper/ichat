@@ -9,6 +9,7 @@ sealed class ChatRoomState with _$ChatRoomState {
   const factory ChatRoomState.loading() = ChatRoomLoadingState;
   const factory ChatRoomState.loaded({
     required List<Message> messages,
+    required String currentUserId,
     @Default(false) bool isOtherUserTyping,
   }) = ChatRoomLoadedState;
   const factory ChatRoomState.error(String message) = ChatRoomErrorState;

@@ -16,5 +16,6 @@ abstract class WsEventDto with _$WsEventDto {
     String? error,
   }) = _WsEventDto;
 
-  factory WsEventDto.fromJson(Map<String, dynamic> json) => _$WsEventDtoFromJson(json);
+  factory WsEventDto.fromJson(Map<String, dynamic> json) =>
+      _$WsEventDtoFromJson(json);
 }

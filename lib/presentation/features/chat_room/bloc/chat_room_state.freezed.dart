@@ -126,12 +126,12 @@ return error(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Message> messages,  bool isOtherUserTyping)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<Message> messages,  String currentUserId,  bool isOtherUserTyping)?  loaded,TResult Function( String message)?  error,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case ChatRoomInitialState() when initial != null:
 return initial();case ChatRoomLoadingState() when loading != null:
 return loading();case ChatRoomLoadedState() when loaded != null:
-return loaded(_that.messages,_that.isOtherUserTyping);case ChatRoomErrorState() when error != null:
+return loaded(_that.messages,_that.currentUserId,_that.isOtherUserTyping);case ChatRoomErrorState() when error != null:
 return error(_that.message);case _:
   return orElse();
 
@@ -150,12 +150,12 @@ return error(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Message> messages,  bool isOtherUserTyping)  loaded,required TResult Function( String message)  error,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<Message> messages,  String currentUserId,  bool isOtherUserTyping)  loaded,required TResult Function( String message)  error,}) {final _that = this;
 switch (_that) {
 case ChatRoomInitialState():
 return initial();case ChatRoomLoadingState():
 return loading();case ChatRoomLoadedState():
-return loaded(_that.messages,_that.isOtherUserTyping);case ChatRoomErrorState():
+return loaded(_that.messages,_that.currentUserId,_that.isOtherUserTyping);case ChatRoomErrorState():
 return error(_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
@@ -170,12 +170,12 @@ return error(_that.message);}
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Message> messages,  bool isOtherUserTyping)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<Message> messages,  String currentUserId,  bool isOtherUserTyping)?  loaded,TResult? Function( String message)?  error,}) {final _that = this;
 switch (_that) {
 case ChatRoomInitialState() when initial != null:
 return initial();case ChatRoomLoadingState() when loading != null:
 return loading();case ChatRoomLoadedState() when loaded != null:
-return loaded(_that.messages,_that.isOtherUserTyping);case ChatRoomErrorState() when error != null:
+return loaded(_that.messages,_that.currentUserId,_that.isOtherUserTyping);case ChatRoomErrorState() when error != null:
 return error(_that.message);case _:
   return null;
 
@@ -252,7 +252,7 @@ String toString() {
 
 
 class ChatRoomLoadedState implements ChatRoomState {
-  const ChatRoomLoadedState({required  List<Message> messages, this.isOtherUserTyping = false}): _messages = messages;
+  const ChatRoomLoadedState({required  List<Message> messages, required this.currentUserId, this.isOtherUserTyping = false}): _messages = messages;
   
 
  final  List<Message> _messages;
@@ -262,6 +262,7 @@ class ChatRoomLoadedState implements ChatRoomState {
   return EqualUnmodifiableListView(_messages);
 }
 
+ final  String currentUserId;
 @JsonKey() final  bool isOtherUserTyping;
 
 /// Create a copy of ChatRoomState
@@ -274,16 +275,16 @@ $ChatRoomLoadedStateCopyWith<ChatRoomLoadedState> get copyWith => _$ChatRoomLoad
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatRoomLoadedState&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.isOtherUserTyping, isOtherUserTyping) || other.isOtherUserTyping == isOtherUserTyping));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ChatRoomLoadedState&&const DeepCollectionEquality().equals(other._messages, _messages)&&(identical(other.currentUserId, currentUserId) || other.currentUserId == currentUserId)&&(identical(other.isOtherUserTyping, isOtherUserTyping) || other.isOtherUserTyping == isOtherUserTyping));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_messages),isOtherUserTyping);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_messages),currentUserId,isOtherUserTyping);
 
 @override
 String toString() {
-  return 'ChatRoomState.loaded(messages: $messages, isOtherUserTyping: $isOtherUserTyping)';
+  return 'ChatRoomState.loaded(messages: $messages, currentUserId: $currentUserId, isOtherUserTyping: $isOtherUserTyping)';
 }
 
 
@@ -294,7 +295,7 @@ abstract mixin class $ChatRoomLoadedStateCopyWith<$Res> implements $ChatRoomStat
   factory $ChatRoomLoadedStateCopyWith(ChatRoomLoadedState value, $Res Function(ChatRoomLoadedState) _then) = _$ChatRoomLoadedStateCopyWithImpl;
 @useResult
 $Res call({
- List<Message> messages, bool isOtherUserTyping
+ List<Message> messages, String currentUserId, bool isOtherUserTyping
 });
 
 
@@ -311,10 +312,11 @@ class _$ChatRoomLoadedStateCopyWithImpl<$Res>
 
 /// Create a copy of ChatRoomState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? messages = null,Object? isOtherUserTyping = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? messages = null,Object? currentUserId = null,Object? isOtherUserTyping = null,}) {
   return _then(ChatRoomLoadedState(
 messages: null == messages ? _self._messages : messages // ignore: cast_nullable_to_non_nullable
-as List<Message>,isOtherUserTyping: null == isOtherUserTyping ? _self.isOtherUserTyping : isOtherUserTyping // ignore: cast_nullable_to_non_nullable
+as List<Message>,currentUserId: null == currentUserId ? _self.currentUserId : currentUserId // ignore: cast_nullable_to_non_nullable
+as String,isOtherUserTyping: null == isOtherUserTyping ? _self.isOtherUserTyping : isOtherUserTyping // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
 }

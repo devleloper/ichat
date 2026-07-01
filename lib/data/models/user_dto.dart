@@ -14,14 +14,11 @@ abstract class UserDto with _$UserDto {
 
   const UserDto._();
 
-  factory UserDto.fromJson(Map<String, dynamic> json) => _$UserDtoFromJson(json);
+  factory UserDto.fromJson(Map<String, dynamic> json) =>
+      _$UserDtoFromJson(json);
 
   User toEntity() {
-    return User(
-      id: id,
-      name: name,
-      createdAt: createdAt,
-    );
+    return User(id: id, name: name, createdAt: createdAt);
   }
 
   factory UserDto.fromEntity(User entity) {
