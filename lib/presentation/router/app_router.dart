@@ -5,9 +5,13 @@ import '../features/chat_list/bloc/chat_list_bloc.dart';
 import '../features/chat_list/bloc/chat_list_state.dart';
 import '../features/chat_list/view/chat_list_screen.dart';
 import '../features/chat_room/view/chat_room_screen.dart';
+import '../../core/di/service_locator.dart';
+import '../../domain/repositories/i_auth_repository.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/',
+  initialLocation: getIt<IAuthRepository>().currentUser != null
+      ? '/chats'
+      : '/',
   routes: [
     GoRoute(path: '/', builder: (context, state) => const AuthScreen()),
     GoRoute(
