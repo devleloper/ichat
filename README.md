@@ -2,6 +2,8 @@
 
 Полнофункциональный Flutter-клиент для обмена сообщениями в реальном времени, написанный с упором на чистую архитектуру, надежную работу с WebSocket и отзывчивый iOS-подобный UI.
 
+<img width="1626" height="1080" alt="banner" src="https://github.com/user-attachments/assets/20f4d753-0bac-4d97-ae59-f94b17dc89a5" />
+
 ---
 
 ## Архитектура: Clean Architecture
