@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/extensions/datetime_extension.dart';
-import '../../../../domain/entities/room.dart';
-import '../../../../domain/entities/user.dart';
+import '../../../../domain/entities/room/room.dart';
+import '../../../../domain/entities/user/user.dart';
 import '../../../theme/app_theme.dart';
 import '../../../widgets/user_tile.dart';
 

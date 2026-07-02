@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:convert';
 import 'package:web_socket_channel/web_socket_channel.dart';
-import '../models/ws_event_dto.dart';
-import '../models/incoming_ws_message_dto.dart';
+import '../models/ws_event/ws_event_dto.dart';
+import '../models/incoming_ws_message/incoming_ws_message_dto.dart';
 
 class WebSocketClient {
   final String _baseUrl;

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../../domain/entities/message.dart';
+import '../../../../domain/entities/message/message.dart';
 
 part 'chat_room_state.freezed.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constants/app_strings.dart';
-import '../../../../domain/entities/user.dart';
+import '../../../../domain/entities/user/user.dart';
 import '../../../widgets/user_tile.dart';
 import '../bloc/chat_list_bloc.dart';
 import '../bloc/chat_list_event.dart';

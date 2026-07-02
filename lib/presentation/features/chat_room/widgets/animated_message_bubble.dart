@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../domain/entities/message.dart';
+import '../../../../domain/entities/message/message.dart';
 
 class AnimatedMessageBubble extends StatefulWidget {
   final Message message;

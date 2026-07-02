@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'message.dart';
+import '../message/message.dart';
 
 part 'room.freezed.dart';
 

@@ -2,11 +2,11 @@
 
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../domain/entities/room.dart';
+import '../../../../domain/entities/room/room.dart';
 import '../../../../domain/repositories/i_auth_repository.dart';
 import '../../../../domain/repositories/i_chat_repository.dart';
-import '../../../../domain/usecases/get_rooms_usecase.dart';
-import '../../../../domain/usecases/get_users_usecase.dart';
+import '../../../../domain/usecases/room/get_rooms_usecase.dart';
+import '../../../../domain/usecases/user/get_users_usecase.dart';
 import 'chat_list_event.dart';
 import 'chat_list_state.dart';
 

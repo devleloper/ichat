@@ -1,5 +1,5 @@
-import '../entities/room.dart';
-import '../repositories/i_chat_repository.dart';
+import '../../entities/room/room.dart';
+import '../../repositories/i_chat_repository.dart';
 
 final class GetRoomsUseCase {
   const GetRoomsUseCase(this._repository);

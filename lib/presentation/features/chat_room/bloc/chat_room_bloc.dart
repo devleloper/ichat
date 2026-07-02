@@ -4,12 +4,12 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../domain/entities/message.dart';
+import '../../../../domain/entities/message/message.dart';
 import '../../../../domain/repositories/i_auth_repository.dart';
 import '../../../../domain/repositories/i_chat_repository.dart';
-import '../../../../domain/usecases/connect_to_room_usecase.dart';
-import '../../../../domain/usecases/get_messages_usecase.dart';
-import '../../../../domain/usecases/send_message_usecase.dart';
+import '../../../../domain/usecases/room/connect_to_room_usecase.dart';
+import '../../../../domain/usecases/message/get_messages_usecase.dart';
+import '../../../../domain/usecases/message/send_message_usecase.dart';
 import 'chat_room_event.dart';
 import 'chat_room_state.dart';
 

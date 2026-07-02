@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../domain/entities/user.dart';
+import '../../domain/entities/user/user.dart';
 import '../../domain/failures/app_failure.dart';
 import '../../domain/repositories/i_auth_repository.dart';
-import '../models/user_dto.dart';
+import '../models/user/user_dto.dart';
 import '../network/api_client.dart';
 
 class AuthRepository implements IAuthRepository {

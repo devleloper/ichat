@@ -1,5 +1,5 @@
-import '../entities/message.dart';
-import '../repositories/i_chat_repository.dart';
+import '../../entities/message/message.dart';
+import '../../repositories/i_chat_repository.dart';
 
 final class SendMessageUseCase {
   const SendMessageUseCase(this._repository);

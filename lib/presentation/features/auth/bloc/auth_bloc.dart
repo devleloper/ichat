@@ -2,8 +2,8 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../domain/repositories/i_auth_repository.dart';
-import '../../../../domain/usecases/create_user_usecase.dart';
-import '../../../../domain/usecases/get_users_usecase.dart';
+import '../../../../domain/usecases/user/create_user_usecase.dart';
+import '../../../../domain/usecases/user/get_users_usecase.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 
