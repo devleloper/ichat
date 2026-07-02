@@ -89,61 +89,49 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     userName = state.userCache[state.currentUserId]?.name ?? '';
                   }
 
-                  return SliverAppBar(
-                    floating: true,
-                    pinned: true,
-                    expandedHeight: 70.0,
-                    backgroundColor: context.bgPrimary,
-                    flexibleSpace: FlexibleSpaceBar(
-                      titlePadding: const EdgeInsets.only(left: 16, bottom: 12),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                AppStrings.messages,
-                                style: TextStyle(
-                                  color: context.textMain,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: -0.5,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              BounceButton(
-                                onPressed: () {
-                                  _showProfileSheet(context, userName);
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.only(top: 2.0),
-                                  child: Icon(
-                                    CupertinoIcons.person_crop_circle,
-                                    color: AppTheme.iMessageBlue,
-                                    size: 22,
-                                  ),
-                                ),
-                              ),
-                            ],
+                  return CupertinoSliverNavigationBar(
+                    largeTitle: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          AppStrings.messages,
+                          style: TextStyle(
+                            color: context.textMain,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: -0.5,
                           ),
-                          BounceButton(
-                            onPressed: () {
-                              if (state is ChatListLoadedState) {
-                                _showNewMessageSheet(context, state);
-                              }
-                            },
-                            child: const Padding(
-                              padding: EdgeInsets.only(right: 16.0, top: 2.0),
-                              child: Icon(
-                                CupertinoIcons.square_pencil,
-                                color: AppTheme.iMessageBlue,
-                                size: 22,
-                              ),
-                            ),
+                        ),
+                        const SizedBox(width: 8),
+                        BounceButton(
+                          onPressed: () {
+                            _showProfileSheet(context, userName);
+                          },
+                          child: const Icon(
+                            CupertinoIcons.person_crop_circle,
+                            color: AppTheme.iMessageBlue,
+                            size: 26,
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                    trailing: BounceButton(
+                      onPressed: () {
+                        if (state is ChatListLoadedState) {
+                          _showNewMessageSheet(context, state);
+                        }
+                      },
+                      child: const Icon(
+                        CupertinoIcons.square_pencil,
+                        color: AppTheme.iMessageBlue,
+                        size: 24,
+                      ),
+                    ),
+                    backgroundColor: context.bgPrimary.withValues(alpha: 0.7),
+                    border: Border(
+                      bottom: BorderSide(
+                        color: context.separatorColor,
+                        width: 0.5,
                       ),
                     ),
                   );

@@ -197,10 +197,7 @@ class _FlyingTextState extends State<_FlyingText>
       begin: 0,
       end: -40,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
-    _opacityAnimation = Tween<double>(
-      begin: 1,
-      end: 0,
-    ).animate(
+    _opacityAnimation = Tween<double>(begin: 1, end: 0).animate(
       CurvedAnimation(
         parent: _controller,
         curve: const Interval(0.0, 0.35, curve: Curves.easeOut),
