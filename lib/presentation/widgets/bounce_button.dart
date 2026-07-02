@@ -11,8 +11,8 @@ class BounceButton extends StatefulWidget {
     super.key,
     required this.child,
     required this.onPressed,
-    this.scaleFactor = 0.95,
-    this.duration = const Duration(milliseconds: 150),
+    this.scaleFactor = 0.92,
+    this.duration = const Duration(milliseconds: 100),
     this.behavior = HitTestBehavior.opaque,
   });
 
@@ -41,27 +41,30 @@ class _BounceButtonState extends State<BounceButton>
     super.dispose();
   }
 
-  void _onTapDown(TapDownDetails details) {
+  void _onPointerDown(PointerDownEvent event) {
     _controller.forward();
   }
 
-  void _onTapUp(TapUpDetails details) {
+  void _onPointerUp(PointerUpEvent event) {
     _controller.reverse();
-    widget.onPressed();
   }
 
-  void _onTapCancel() {
+  void _onPointerCancel(PointerCancelEvent event) {
     _controller.reverse();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Listener(
+      onPointerDown: _onPointerDown,
+      onPointerUp: _onPointerUp,
+      onPointerCancel: _onPointerCancel,
       behavior: widget.behavior,
-      onTapDown: _onTapDown,
-      onTapUp: _onTapUp,
-      onTapCancel: _onTapCancel,
-      child: ScaleTransition(scale: _scaleAnimation, child: widget.child),
+      child: GestureDetector(
+        behavior: widget.behavior,
+        onTap: widget.onPressed,
+        child: ScaleTransition(scale: _scaleAnimation, child: widget.child),
+      ),
     );
   }
 }
