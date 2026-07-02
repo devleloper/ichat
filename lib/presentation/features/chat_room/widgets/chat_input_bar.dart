@@ -17,6 +17,7 @@ class ChatInputBar extends StatefulWidget {
 
 class _ChatInputBarState extends State<ChatInputBar> {
   final TextEditingController _controller = TextEditingController();
+  final GlobalKey _textFieldKey = GlobalKey();
 
   @override
   void initState() {
@@ -40,8 +41,39 @@ class _ChatInputBarState extends State<ChatInputBar> {
   void _sendMessage() {
     final text = _controller.text.trim();
     if (text.isEmpty) return;
+
+    _playFlyingTextAnimation(text);
+
     context.read<ChatRoomBloc>().add(ChatRoomEvent.sendMessage(text));
     _controller.clear();
+  }
+
+  void _playFlyingTextAnimation(String text) {
+    final renderBox =
+        _textFieldKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox == null) return;
+
+    final offset = renderBox.localToGlobal(Offset.zero);
+    final size = renderBox.size;
+    final textStyle = TextStyle(color: context.textMain, fontSize: 16);
+
+    final overlay = Overlay.of(context);
+    late OverlayEntry entry;
+
+    entry = OverlayEntry(
+      builder: (context) {
+        return _FlyingText(
+          text: text,
+          startOffset: offset,
+          size: size,
+          textStyle: textStyle,
+          onComplete: () {
+            entry.remove();
+          },
+        );
+      },
+    );
+    overlay.insert(entry);
   }
 
   @override
@@ -73,6 +105,7 @@ class _ChatInputBarState extends State<ChatInputBar> {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12.0, right: 8.0),
                       child: TextField(
+                        key: _textFieldKey,
                         controller: _controller,
                         maxLines: 1,
                         textInputAction: TextInputAction.send,
@@ -124,6 +157,102 @@ class _ChatInputBarState extends State<ChatInputBar> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _FlyingText extends StatefulWidget {
+  final String text;
+  final Offset startOffset;
+  final Size size;
+  final TextStyle textStyle;
+  final VoidCallback onComplete;
+
+  const _FlyingText({
+    required this.text,
+    required this.startOffset,
+    required this.size,
+    required this.textStyle,
+    required this.onComplete,
+  });
+
+  @override
+  State<_FlyingText> createState() => _FlyingTextState();
+}
+
+class _FlyingTextState extends State<_FlyingText>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _dyAnimation;
+  late Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _dyAnimation = Tween<double>(
+      begin: 0,
+      end: -40,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+    _opacityAnimation = Tween<double>(
+      begin: 1,
+      end: 0,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(0.0, 0.35, curve: Curves.easeOut),
+      ),
+    );
+
+    _controller.forward().then((_) => widget.onComplete());
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return Positioned(
+          left: widget.startOffset.dx,
+          top: widget.startOffset.dy,
+          width: widget.size.width,
+          height: widget.size.height,
+          child: ClipRect(
+            child: Transform.translate(
+              offset: Offset(0, _dyAnimation.value),
+              child: Opacity(
+                opacity: _opacityAnimation.value,
+                child: Material(
+                  color: Colors.transparent,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                    ), // match contentPadding
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        widget.text,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: widget.textStyle,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
