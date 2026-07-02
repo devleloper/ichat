@@ -46,10 +46,12 @@ class _BounceButtonState extends State<BounceButton>
   }
 
   void _onPointerUp(PointerUpEvent event) {
+    if (!mounted) return;
     _controller.reverse();
   }
 
   void _onPointerCancel(PointerCancelEvent event) {
+    if (!mounted) return;
     _controller.reverse();
   }
 

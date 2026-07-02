@@ -15,6 +15,7 @@ class WebSocketClient {
   String? _currentRoomId;
   String? _currentUserId;
   int _reconnectAttempts = 0;
+  final List<IncomingWsMessageDto> _pendingMessages = [];
 
   static const int _maxBackoffSeconds = 30;
 
@@ -40,6 +41,10 @@ class WebSocketClient {
           _hasReceivedFirstMessage = true;
           _isConnected = true;
           _reconnectAttempts = 0;
+          for (final msg in _pendingMessages) {
+            send(msg);
+          }
+          _pendingMessages.clear();
         }
         try {
           final jsonMap = jsonDecode(message as String) as Map<String, dynamic>;
@@ -62,8 +67,6 @@ class WebSocketClient {
         _scheduleReconnect();
       },
     );
-
-    _isConnected = true;
   }
 
   void send(IncomingWsMessageDto payload) {
@@ -73,6 +76,8 @@ class WebSocketClient {
       } catch (e) {
         log('WebSocketClient: send error: $e', name: 'WebSocketClient');
       }
+    } else {
+      _pendingMessages.add(payload);
     }
   }
 
@@ -100,5 +105,6 @@ class WebSocketClient {
     _reconnectTimer = null;
     _channel?.sink.close();
     _channel = null;
+    _pendingMessages.clear();
   }
 }

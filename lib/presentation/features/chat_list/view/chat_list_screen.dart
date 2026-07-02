@@ -137,6 +137,17 @@ class _ChatListScreenState extends State<ChatListScreen> {
                   );
                 },
               ),
+              CupertinoSliverRefreshControl(
+                onRefresh: () async {
+                  final bloc = context.read<ChatListBloc>();
+                  bloc.add(const ChatListEvent.loadRooms());
+                  await bloc.stream.firstWhere(
+                    (state) =>
+                        state is ChatListLoadedState ||
+                        state is ChatListErrorState,
+                  );
+                },
+              ),
               BlocBuilder<ChatListBloc, ChatListState>(
                 builder: (context, state) => switch (state) {
                   ChatListLoadingState() => const SliverFillRemaining(
