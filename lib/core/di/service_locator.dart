@@ -17,7 +17,7 @@ import '../config/app_config.dart';
 final getIt = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
-  const config = AppConfig.local;
+  final config = AppConfig.local;
 
   getIt.registerLazySingleton<ApiClient>(
     () => ApiClient(baseUrl: config.apiBaseUrl),
