@@ -30,7 +30,7 @@ class ChatRepository implements IChatRepository {
           clientMessageId: eventDto.clientMessageId,
         );
         _messageStreamController.add(messageEntity);
-      } else if (eventDto.type == 'user.typing' && eventDto.userId != null) {
+      } else if (eventDto.type == 'typing' && eventDto.userId != null) {
         _typingStreamController.add(eventDto.userId!);
       } else if (eventDto.type == 'ready') {
         _readyStreamController.add(null);

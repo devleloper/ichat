@@ -3,7 +3,9 @@ import '../../../theme/app_theme.dart';
 import '../../../widgets/imessage_bubble.dart';
 
 class TypingIndicatorBubble extends StatefulWidget {
-  const TypingIndicatorBubble({super.key});
+  final bool isTyping;
+
+  const TypingIndicatorBubble({super.key, required this.isTyping});
 
   @override
   State<TypingIndicatorBubble> createState() => _TypingIndicatorBubbleState();
@@ -11,6 +13,9 @@ class TypingIndicatorBubble extends StatefulWidget {
 
 class _TypingIndicatorBubbleState extends State<TypingIndicatorBubble>
     with TickerProviderStateMixin {
+  late final AnimationController _expandController;
+  late final CurvedAnimation _expandAnimation;
+
   late final List<AnimationController> _dotControllers;
   late final List<Animation<double>> _dotScales;
 
@@ -21,6 +26,19 @@ class _TypingIndicatorBubbleState extends State<TypingIndicatorBubble>
   @override
   void initState() {
     super.initState();
+    _expandController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _expandAnimation = CurvedAnimation(
+      parent: _expandController,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
+
+    if (widget.isTyping) {
+      _expandController.value = 1.0;
+    }
     _dotControllers = List.generate(
       _dotCount,
       (_) => AnimationController(vsync: this, duration: _dotPeriod),
@@ -40,7 +58,20 @@ class _TypingIndicatorBubbleState extends State<TypingIndicatorBubble>
   }
 
   @override
+  void didUpdateWidget(TypingIndicatorBubble oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isTyping != oldWidget.isTyping) {
+      if (widget.isTyping) {
+        _expandController.forward();
+      } else {
+        _expandController.reverse();
+      }
+    }
+  }
+
+  @override
   void dispose() {
+    _expandController.dispose();
     for (final c in _dotControllers) {
       c.dispose();
     }
@@ -49,36 +80,49 @@ class _TypingIndicatorBubbleState extends State<TypingIndicatorBubble>
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
-        child: _BubbleContainer(
-          color: AppTheme.receiverGray,
-          showTail: true,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 14.0,
-              vertical: 12.0,
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(_dotCount, (i) {
-                return Padding(
-                  padding: EdgeInsets.only(right: i < _dotCount - 1 ? 4.0 : 0),
-                  child: ScaleTransition(
-                    scale: _dotScales[i],
-                    child: Container(
-                      width: 8,
-                      height: 8,
-                      decoration: const BoxDecoration(
-                        color: AppTheme.secondaryLabel,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
+    return SizeTransition(
+      sizeFactor: _expandAnimation,
+      alignment: Alignment.bottomCenter,
+      child: ScaleTransition(
+        scale: _expandAnimation,
+        alignment: Alignment.bottomLeft,
+        child: FadeTransition(
+          opacity: _expandAnimation,
+          child: Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
+              child: _BubbleContainer(
+                color: AppTheme.receiverGray,
+                showTail: true,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14.0,
+                    vertical: 12.0,
                   ),
-                );
-              }),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: List.generate(_dotCount, (i) {
+                      return Padding(
+                        padding: EdgeInsets.only(
+                          right: i < _dotCount - 1 ? 4.0 : 0,
+                        ),
+                        child: ScaleTransition(
+                          scale: _dotScales[i],
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: AppTheme.secondaryLabel,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ),
+              ),
             ),
           ),
         ),

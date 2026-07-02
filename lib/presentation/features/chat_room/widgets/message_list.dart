@@ -39,7 +39,7 @@ class _LoadedMessageList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemCount = state.messages.length + (state.isOtherUserTyping ? 1 : 0);
+    final itemCount = state.messages.length + 1;
 
     final topPadding = 70 + MediaQuery.paddingOf(context).top + 8.0;
 
@@ -48,11 +48,11 @@ class _LoadedMessageList extends StatelessWidget {
       padding: EdgeInsets.only(top: topPadding, bottom: 8.0),
       itemCount: itemCount,
       itemBuilder: (context, index) {
-        if (state.isOtherUserTyping && index == 0) {
-          return const TypingIndicatorBubble();
+        if (index == 0) {
+          return TypingIndicatorBubble(isTyping: state.isOtherUserTyping);
         }
 
-        final msgIndex = state.isOtherUserTyping ? index - 1 : index;
+        final msgIndex = index - 1;
         final msg = state.messages[msgIndex];
         final isSender = msg.senderId == state.currentUserId;
         final isLastInGroup =
