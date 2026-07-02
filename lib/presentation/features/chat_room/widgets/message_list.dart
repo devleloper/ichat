@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../domain/entities/message.dart';
+import '../../../../domain/entities/message/message.dart';
 import '../../../theme/app_theme.dart';
 import '../../../widgets/imessage_bubble.dart';
 import '../bloc/chat_room_bloc.dart';
@@ -82,7 +82,9 @@ class _LoadedMessageList extends StatelessWidget {
                 isSender: isSender,
                 showTail: isLastInGroup,
               ),
-              if (isSender && msg.status != MessageStatus.sent && index == 0)
+              if (isSender &&
+                  msg.status != MessageStatus.sent &&
+                  (msgIndex == 0 || msg.status == MessageStatus.failed))
                 Padding(
                   padding: const EdgeInsets.only(right: 22.0, top: 2.0),
                   child: MessageStatusLabel(status: msg.status),

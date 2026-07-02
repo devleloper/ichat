@@ -1,4 +1,4 @@
-import '../repositories/i_chat_repository.dart';
+import '../../repositories/i_chat_repository.dart';
 
 final class ConnectToRoomUseCase {
   const ConnectToRoomUseCase(this._repository);

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../../../domain/entities/message.dart';
+import '../../../../domain/entities/message/message.dart';
 import '../../../theme/app_theme.dart';
 
 class MessageStatusLabel extends StatelessWidget {

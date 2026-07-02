@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../domain/entities/room.dart';
-import 'message_dto.dart';
+import '../../../domain/entities/room/room.dart';
+import '../message/message_dto.dart';
 
 part 'room_dto.freezed.dart';
 part 'room_dto.g.dart';

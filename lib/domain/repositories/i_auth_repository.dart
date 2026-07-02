@@ -1,4 +1,4 @@
-import '../entities/user.dart';
+import '../entities/user/user.dart';
 
 abstract class IAuthRepository {
   User? get currentUser;

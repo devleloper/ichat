@@ -1,5 +1,5 @@
-import '../entities/message.dart';
-import '../entities/room.dart';
+import '../entities/message/message.dart';
+import '../entities/room/room.dart';
 
 abstract class IChatRepository {
   Future<List<Room>> getRooms(String userId);

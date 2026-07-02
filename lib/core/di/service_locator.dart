@@ -6,12 +6,12 @@ import '../../data/repositories/auth_repository.dart';
 import '../../data/repositories/chat_repository.dart';
 import '../../domain/repositories/i_auth_repository.dart';
 import '../../domain/repositories/i_chat_repository.dart';
-import '../../domain/usecases/connect_to_room_usecase.dart';
-import '../../domain/usecases/create_user_usecase.dart';
-import '../../domain/usecases/get_messages_usecase.dart';
-import '../../domain/usecases/get_rooms_usecase.dart';
-import '../../domain/usecases/get_users_usecase.dart';
-import '../../domain/usecases/send_message_usecase.dart';
+import '../../domain/usecases/room/connect_to_room_usecase.dart';
+import '../../domain/usecases/user/create_user_usecase.dart';
+import '../../domain/usecases/message/get_messages_usecase.dart';
+import '../../domain/usecases/room/get_rooms_usecase.dart';
+import '../../domain/usecases/user/get_users_usecase.dart';
+import '../../domain/usecases/message/send_message_usecase.dart';
 import '../config/app_config.dart';
 
 final getIt = GetIt.instance;

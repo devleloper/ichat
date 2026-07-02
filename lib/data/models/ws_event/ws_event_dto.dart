@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'message_dto.dart';
+import '../message/message_dto.dart';
 
 part 'ws_event_dto.freezed.dart';
 part 'ws_event_dto.g.dart';

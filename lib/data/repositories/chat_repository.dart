@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-import '../../domain/entities/message.dart';
-import '../../domain/entities/room.dart';
+import '../../domain/entities/message/message.dart';
+import '../../domain/entities/room/room.dart';
 import '../../domain/failures/app_failure.dart';
 import '../../domain/repositories/i_chat_repository.dart';
-import '../models/message_dto.dart';
-import '../models/room_dto.dart';
-import '../models/incoming_ws_message_dto.dart';
+import '../models/message/message_dto.dart';
+import '../models/room/room_dto.dart';
+import '../models/incoming_ws_message/incoming_ws_message_dto.dart';
 import '../network/api_client.dart';
 import '../network/websocket_client.dart';
 

@@ -1,5 +1,5 @@
-import '../entities/user.dart';
-import '../repositories/i_auth_repository.dart';
+import '../../entities/user/user.dart';
+import '../../repositories/i_auth_repository.dart';
 
 final class CreateUserUseCase {
   const CreateUserUseCase(this._repository);
