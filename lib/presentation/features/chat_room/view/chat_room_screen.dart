@@ -2,6 +2,7 @@ import 'dart:ui' as dart_ui;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/app_strings.dart';
@@ -62,6 +63,7 @@ class _ChatRoomView extends StatelessWidget {
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
+      systemOverlayStyle: SystemUiOverlayStyle.dark,
       flexibleSpace: ClipRect(
         child: BackdropFilter(
           filter: dart_ui.ImageFilter.blur(sigmaX: 15, sigmaY: 15),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTheme {
   const AppTheme._();
@@ -27,6 +28,7 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: backgroundPrimary,
         elevation: 0,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         iconTheme: IconThemeData(color: iMessageBlue),
         titleTextStyle: TextStyle(
           color: textPrimary,
