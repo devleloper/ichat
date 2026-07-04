@@ -8,6 +8,7 @@ import '../../../../domain/entities/message/message.dart';
 import '../../../../domain/repositories/i_auth_repository.dart';
 import '../../../../domain/repositories/i_chat_repository.dart';
 import '../../../../domain/usecases/room/connect_to_room_usecase.dart';
+import '../../../../core/services/audio_service.dart';
 import '../../../../domain/usecases/message/get_messages_usecase.dart';
 import '../../../../domain/usecases/message/send_message_usecase.dart';
 import 'chat_room_event.dart';
@@ -19,6 +20,7 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
   final GetMessagesUseCase _getMessagesUseCase;
   final SendMessageUseCase _sendMessageUseCase;
   final ConnectToRoomUseCase _connectToRoomUseCase;
+  final AudioService _audioService;
   final String _roomId;
 
   StreamSubscription<Message>? _messageSubscription;
@@ -34,12 +36,14 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
     required GetMessagesUseCase getMessagesUseCase,
     required SendMessageUseCase sendMessageUseCase,
     required ConnectToRoomUseCase connectToRoomUseCase,
+    required AudioService audioService,
     required String roomId,
   }) : _chatRepository = chatRepository,
        _authRepository = authRepository,
        _getMessagesUseCase = getMessagesUseCase,
        _sendMessageUseCase = sendMessageUseCase,
        _connectToRoomUseCase = connectToRoomUseCase,
+       _audioService = audioService,
        _roomId = roomId,
        super(const ChatRoomState.initial()) {
     on<ChatRoomLoadMessagesEvent>(_onLoadMessages);
@@ -148,6 +152,8 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
         messages: [optimisticMessage, ...currentState.messages],
       ),
     );
+    
+    _audioService.playSendSound();
 
     try {
       await _sendMessageUseCase(optimisticMessage);
@@ -179,6 +185,10 @@ class ChatRoomBloc extends Bloc<ChatRoomEvent, ChatRoomState> {
 
     updatedMessages.insert(0, incoming);
     emit(currentState.copyWith(messages: updatedMessages));
+    
+    if (incoming.senderId != currentState.currentUserId) {
+      _audioService.playReceiveSound();
+    }
   }
 
   void _onMessageError(

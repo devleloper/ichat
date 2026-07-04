@@ -33,6 +33,7 @@ class ChatRoomScreen extends StatelessWidget {
         getMessagesUseCase: getIt(),
         sendMessageUseCase: getIt(),
         connectToRoomUseCase: getIt(),
+        audioService: getIt(),
         roomId: roomId,
       )..add(const ChatRoomEvent.loadMessages()),
       child: _ChatRoomView(otherUserName: otherUserName),

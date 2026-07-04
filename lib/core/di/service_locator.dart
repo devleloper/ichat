@@ -13,6 +13,7 @@ import '../../domain/usecases/room/get_rooms_usecase.dart';
 import '../../domain/usecases/user/get_users_usecase.dart';
 import '../../domain/usecases/message/send_message_usecase.dart';
 import '../config/app_config.dart';
+import '../services/audio_service.dart';
 
 final getIt = GetIt.instance;
 
@@ -25,6 +26,10 @@ Future<void> setupServiceLocator() async {
   getIt.registerLazySingleton<WebSocketClient>(
     () => WebSocketClient(baseUrl: config.wsBaseUrl),
   );
+
+  final audioService = AudioService();
+  await audioService.init();
+  getIt.registerLazySingleton<AudioService>(() => audioService);
 
   getIt.registerLazySingleton<IAuthRepository>(() => AuthRepository(getIt()));
   getIt.registerLazySingleton<IChatRepository>(
