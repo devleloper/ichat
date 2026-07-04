@@ -5,6 +5,7 @@ import '../../domain/failures/app_failure.dart';
 import '../../domain/repositories/i_auth_repository.dart';
 import '../models/user/user_dto.dart';
 import '../network/api_client.dart';
+import '../network/api_endpoints.dart';
 
 class AuthRepository implements IAuthRepository {
   final ApiClient _apiClient;
@@ -36,7 +37,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<List<User>> getUsers() async {
     try {
-      final response = await _apiClient.dio.get('/api/users');
+      final response = await _apiClient.dio.get(ApiEndpoints.users);
       final data = response.data['items'] as List<dynamic>?;
       if (data == null) return [];
       return data
@@ -53,7 +54,7 @@ class AuthRepository implements IAuthRepository {
   Future<User> createUser(String name) async {
     try {
       final response = await _apiClient.dio.post(
-        '/api/users',
+        ApiEndpoints.users,
         data: {'name': name},
       );
       final userDto = UserDto.fromJson(response.data as Map<String, dynamic>);

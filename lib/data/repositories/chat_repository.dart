@@ -8,6 +8,7 @@ import '../models/message/message_dto.dart';
 import '../models/room/room_dto.dart';
 import '../models/incoming_ws_message/incoming_ws_message_dto.dart';
 import '../network/api_client.dart';
+import '../network/api_endpoints.dart';
 import '../network/websocket_client.dart';
 
 class ChatRepository implements IChatRepository {
@@ -49,7 +50,7 @@ class ChatRepository implements IChatRepository {
   Future<List<Room>> getRooms(String userId) async {
     try {
       final response = await _apiClient.dio.get(
-        '/api/rooms',
+        ApiEndpoints.rooms,
         queryParameters: {'user_id': userId},
       );
       final data = response.data['items'] as List<dynamic>?;
@@ -68,7 +69,7 @@ class ChatRepository implements IChatRepository {
   Future<Room> createDirectRoom(String userAId, String userBId) async {
     try {
       final response = await _apiClient.dio.post(
-        '/api/rooms/direct',
+        ApiEndpoints.directRoom,
         data: {'user_a_id': userAId, 'user_b_id': userBId},
       );
       return RoomDto.fromJson(response.data as Map<String, dynamic>).toEntity();
@@ -81,7 +82,7 @@ class ChatRepository implements IChatRepository {
   Future<List<Message>> getMessages(String roomId, String userId) async {
     try {
       final response = await _apiClient.dio.get(
-        '/api/rooms/$roomId/messages',
+        ApiEndpoints.roomMessages(roomId),
         queryParameters: {'user_id': userId, 'limit': 50},
       );
       final data = response.data['items'] as List<dynamic>?;
